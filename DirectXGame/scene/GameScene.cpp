@@ -17,10 +17,12 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	textureHandle_ = TextureManager::Load("genshin.png");
 
-	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
-	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
-	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
-	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
+	modelFighterBody_.reset(Model::CreateFromOBJ("body", true));
+	modelFighterHead_.reset(Model::CreateFromOBJ("head", true));
+	modelFighterL_arm_.reset(Model::CreateFromOBJ("arm_left", true));
+	modelFighterR_arm_.reset(Model::CreateFromOBJ("arm_right", true));
+	modelFighterL_feet_.reset(Model::CreateFromOBJ("feet_left", true));
+	modelFighterR_feet_.reset(Model::CreateFromOBJ("feet_right", true));
 
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
@@ -30,26 +32,29 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = std::make_unique<Player>();
-	Vector3 bodyPosition(0, -1, 0);
-	Vector3 headPosition(0, -0.5f, 0);
-	Vector3 l_amrPosition(-0.2f, -0.5f, 0);
-	Vector3 r_amrPosition(0.2f, -0.5f, 0);
+	Vector3 bodyPosition(0, 0, 0);
+	Vector3 headPosition(0, 0, 0);
+	Vector3 l_amrPosition(0, 0, 0);
+	Vector3 r_amrPosition(0, 0, 0);
+	Vector3 l_feetPosition(0, 1.7f, 0);
+	Vector3 r_feetPosition(0, 1.7f, 0);
 	// 自キャラの初期化
 	player_->Initialize(
 		modelFighterBody_.get(), modelFighterHead_.get(), 
-		modelFighterL_arm_.get(),modelFighterR_arm_.get(), 
-		bodyPosition, headPosition, l_amrPosition, r_amrPosition);
+		modelFighterL_arm_.get(),
+	    modelFighterR_arm_.get(), modelFighterL_feet_.get(), modelFighterR_feet_.get(),
+		bodyPosition, headPosition, l_amrPosition, r_amrPosition,l_feetPosition,r_feetPosition);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
 	ground_ = std::make_unique<Ground>();
-	ground_->Initialize(modelGround_, {1.0f,-2.0f,0.0f});
+	ground_->Initialize(modelGround_, {0.0f,0.0f,0.0f});
 	
 	railCamera_ = std::make_unique<RailCamera>();
 	railCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
 
 	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, 0.0f});
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 
