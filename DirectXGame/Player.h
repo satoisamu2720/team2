@@ -1,31 +1,75 @@
-#pragma once
-#include "ViewProjection.h"
-#include "WorldTransform.h"
-#include "DirectXCommon.h"
-#include "Input.h"
+Ôªø#pragma once
 #include "Model.h"
+#include "ImGuiManager.h"
+#include "TextureManager.h"
+#include "WorldTransform.h"
 #include <cassert>
+#include "Input.h"
+#include "PlayerBullet.h"
+#include <list>
+#include "RailCamera.h"
+#include "math.h"
+
 class Player {
 public:
-	/// <summary>
-	/// èâä˙âª
-	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle);
+	
+	///
+	///
+	///
+	///
+	///
+	void Initialize(
+	    Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm,
+	    Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition, Vector3 R_armPosition);
 
-	/// <summary>
-	/// ñàÉtÉåÅ[ÉÄèàóù
-	/// </summary>
+	///
+	///
+	///
 	void Update();
 
+	///
+	///
+	///
+	void Draw(ViewProjection view);
+	///
+	///
+	///
+	void OnCollision();
+	
+	Vector3  GetWorldPosition();
+
+	void SetViewProjection(const ViewProjection* viewProjection) {
+		viewProjection_ = viewProjection;
+	}
+	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
 	/// <summary>
-	/// ï`âÊ
-	/// </summary>
-	void Draw(ViewProjection& viewProjection);
+/// 
+/// </summary>
+	~Player();
 
 private:
-	uint32_t textureHandle_ = 0;
-	Model* model_ = nullptr;
-
 	WorldTransform worldTransform_;
-	ViewProjection viewProjection_;
+
+	WorldTransform worldTransformBody_;
+	WorldTransform worldTransformHead_;
+	WorldTransform worldTransformL_arm_;
+	WorldTransform worldTransformR_arm_;
+
+	const ViewProjection* viewProjection_ = nullptr;
+
+
+	Model* modelFighterBody_;
+	Model* modelFighterHead_;
+	Model* modelFighterL_arm_;
+	Model* modelFighterR_arm_;
+
+	Input* input_ = nullptr;
+	float inputFloat[3]{0, 0, 0};
+	int StopTimer = 0;
+	RailCamera* railCamera_;
+	FollowCamera* followCamera_;
+	// „Ç≠„É£„É©„ÇØ„Çø„Éº„ÅÆÁßªÂãï„Éô„ÇØ„Éà„É´
+	
+	Vector3 velocity_ = {0, 0, 0};
+	
 };
