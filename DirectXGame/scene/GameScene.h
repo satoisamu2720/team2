@@ -15,6 +15,7 @@
 #include "FollowCamera.h"
 #include "Ground.h"
 #include <memory>
+#include <Boss.h>
 
     /// <summary>
 /// ゲームシーン
@@ -70,6 +71,7 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterL_arm_;
 	std::unique_ptr<Model> modelFighterR_arm_;
 	
+	std::unique_ptr<Model> modelBoss_;
 	
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
@@ -81,11 +83,13 @@ private: // メンバ変数
 
 	std::unique_ptr<DebugCamera> debugCamera_;
 	std::unique_ptr<Player> player_;
+	std::unique_ptr<Boss> boss_;
 	std::unique_ptr<Skydome>skydome_;
 	Model* modelSkydome_ = nullptr;
 	std::unique_ptr<Ground> ground_;
 	Model* modelGround_ = nullptr;
 	
+
 	Vector3 velocity_;
 
 	//const WorldTransform& GetWorldTransform() { return matProjection; }
