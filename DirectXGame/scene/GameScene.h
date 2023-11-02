@@ -76,6 +76,9 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelBoss_;
 	std::unique_ptr<Model> modelLotEnemy_;
 	
+	std::unique_ptr<Model> modelFighterL_feet_;
+	std::unique_ptr<Model> modelFighterR_feet_;
+
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
