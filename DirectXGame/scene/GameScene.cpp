@@ -25,7 +25,7 @@ void GameScene::Initialize() {
 	modelFighterR_feet_.reset(Model::CreateFromOBJ("feet_right", true));
 	modelAreaItem_.reset(Model::CreateFromOBJ("body", true));
 	modelEnemyBossOne_.reset(Model::CreateFromOBJ("feet_right", true));
-
+	modelPlayerAttack_.reset(Model::CreateFromOBJ("head", true));
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
 	worldTransform_.Initialize();
@@ -40,12 +40,13 @@ void GameScene::Initialize() {
 	Vector3 r_amrPosition(0, 0, 0);
 	Vector3 l_feetPosition(0, 1.7f, 0);
 	Vector3 r_feetPosition(0, 1.7f, 0);
+	Vector3 attackPosition(0, -2.0f,5.0f);
 	// 自キャラの初期化
 	player_->Initialize(
-		modelFighterBody_.get(), modelFighterHead_.get(), 
-		modelFighterL_arm_.get(),
+		modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
 	    modelFighterR_arm_.get(), modelFighterL_feet_.get(), modelFighterR_feet_.get(),
-		bodyPosition, headPosition, l_amrPosition, r_amrPosition,l_feetPosition,r_feetPosition);
+	    modelPlayerAttack_.get(),
+	    bodyPosition, headPosition, l_amrPosition, r_amrPosition, l_feetPosition, r_feetPosition, attackPosition);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
@@ -125,7 +126,20 @@ void GameScene::Update() {
 	OnCollision();
 }
 void GameScene::OnCollision() {
-
+	if (areaItemCollisionFlag == 1) {
+		// 差を求める
+		float dx =
+		    abs(player_->GetWorldTransform().translation_.x -
+		        areaItem_->GetItemWorldTransform().translation_.x);
+		float dz =
+		    abs(player_->GetWorldTransform().translation_.z -
+		        areaItem_->GetItemWorldTransform().translation_.z);
+		// 衝突したら
+		if (dx < 2 && dz < 2) {
+			areaItemCollisionTimeFlag = 1;
+			areaItemCollisionFlag = 0;
+		}
+	}
 	
 	if (areaItemCollisionFlag == 1) {
 		// 差を求める

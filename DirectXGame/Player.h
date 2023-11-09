@@ -20,15 +20,16 @@ public:
 	///
 	///
 	void Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm,
-	                Model* modelL_feet, Model* modelR_feet,
+	    Model* modelL_feet, Model* modelR_feet,  Model* modelAttack,
 		Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition, Vector3 R_armPosition, 
-					Vector3 L_feetPosition,Vector3 R_feetPosition);
+					Vector3 L_feetPosition,
+	    Vector3 R_feetPosition, Vector3 AttackPosition);
 
 	///
 	///
 	///
 	void Update();
-
+	void Attack();
 	///
 	///
 	///
@@ -44,6 +45,7 @@ public:
 		viewProjection_ = viewProjection;
 	}
 	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
+	const WorldTransform& GetAttack()
 	/// <summary>
 /// 
 /// </summary>
@@ -58,6 +60,7 @@ private:
 	WorldTransform worldTransformR_arm_;
 	WorldTransform worldTransformL_feet_;
 	WorldTransform worldTransformR_feet_;
+	WorldTransform worldTransformAttack_;
 
 	const ViewProjection* viewProjection_ = nullptr;
 
@@ -68,6 +71,7 @@ private:
 	Model* modelFighterR_arm_;
 	Model* modelFighterL_feet_;
 	Model* modelFighterR_feet_;
+	Model* modelAttack_;
 
 	Input* input_ = nullptr;
 	float inputFloat[3]{0, 0, 0};
@@ -75,6 +79,7 @@ private:
 	RailCamera* railCamera_;
 	FollowCamera* followCamera_;
 	int playerJumpFlag = 0;
+	int playerAttackFlag = 0;
 	// キャラクターの移動ベクトル
 	
 	Vector3 velocity_ = {0, 0, 0};
