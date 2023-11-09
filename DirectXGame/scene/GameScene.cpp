@@ -126,13 +126,13 @@ void GameScene::Update() {
 	OnCollision();
 }
 void GameScene::OnCollision() {
-	if (areaItemCollisionFlag == 1) {
+	if (areaItemCollisionFlag == 1 && player_->GetPlayerAttackFlag() == 1) {
 		// 差を求める
 		float dx =
-		    abs(player_->GetWorldTransform().translation_.x -
+		    abs(player_->GetAttack().translation_.x -
 		        areaItem_->GetItemWorldTransform().translation_.x);
 		float dz =
-		    abs(player_->GetWorldTransform().translation_.z -
+		    abs(player_->GetAttack().translation_.z -
 		        areaItem_->GetItemWorldTransform().translation_.z);
 		// 衝突したら
 		if (dx < 2 && dz < 2) {
@@ -148,7 +148,7 @@ void GameScene::OnCollision() {
 		float dz =
 		    abs(player_->GetWorldTransform().translation_.z - areaItem_->GetItemWorldTransform().translation_.z);
 		// 衝突したら
-		if (dx < 2 && dz < 2) {
+		if (dx < 2 && dz < 1) {
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
 		}

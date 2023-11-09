@@ -45,7 +45,8 @@ public:
 		viewProjection_ = viewProjection;
 	}
 	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
-	const WorldTransform& GetAttack()
+	const WorldTransform& GetAttack() { return worldTransformAttack_; }
+	const bool& GetPlayerAttackFlag() { return playerAttackFlag; }
 	/// <summary>
 /// 
 /// </summary>
@@ -79,7 +80,7 @@ private:
 	RailCamera* railCamera_;
 	FollowCamera* followCamera_;
 	int playerJumpFlag = 0;
-	int playerAttackFlag = 0;
+	bool playerAttackFlag = 0;
 	// キャラクターの移動ベクトル
 	
 	Vector3 velocity_ = {0, 0, 0};

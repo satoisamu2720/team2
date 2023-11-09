@@ -23,4 +23,5 @@ private:
 	WorldTransform worldTransform_;
 	Input* input_ = nullptr;
 	Matrix4x4 rotateYMatrix_;
+
 };
