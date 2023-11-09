@@ -91,9 +91,9 @@ void GameScene::Update() {
 	//デバックカメラのifdef
 
 	#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == false) {
+	if (input_->TriggerKey(DIK_0) && isDebugCameraActive_ == false) {
 		isDebugCameraActive_ = true;
-	} else if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == true) {
+	} else if (input_->TriggerKey(DIK_0) && isDebugCameraActive_ == true) {
 		isDebugCameraActive_ = false;
 		
 	}

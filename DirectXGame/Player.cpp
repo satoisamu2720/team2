@@ -83,6 +83,10 @@ void Player::Update() {
 		move_.x += kCharacterSpeed;
 	}
 
+	if (input_->PushKey(DIK_SPACE)) {
+		move_.y += kCharacterSpeed;
+	}
+
 	if (walkModelTimeFlag == 1) {
 		walkModelTime++;
 		if (walkModelTime <= 8) {
