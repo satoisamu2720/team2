@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Player.h"
-#include "VectraCalculation.h"
+
 
 Player::~Player() {
 

@@ -24,6 +24,7 @@ void GameScene::Initialize() {
 	modelFighterL_feet_.reset(Model::CreateFromOBJ("feet_left", true));
 	modelFighterR_feet_.reset(Model::CreateFromOBJ("feet_right", true));
 	modelAreaItem_.reset(Model::CreateFromOBJ("body", true));
+	modelEnemyBossOne_.reset(Model::CreateFromOBJ("feet_right", true));
 
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
@@ -60,6 +61,14 @@ void GameScene::Initialize() {
 
 	areaItem_ = std::make_unique<AreaItem>();
 	areaItem_->Initialize(modelAreaItem_.get(), {10.0f, 0.0f, 0.0f});
+
+	enemyBossOne_ = std::make_unique<EnemyBossOne>();
+	enemyBossOne_->Initialize( modelEnemyBossOne_.get(), {
+		areaItem_->GetItemWorldTransform().translation_.x,
+		10.0f,
+		areaItem_->GetItemWorldTransform().translation_.z
+		}
+	);
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 
@@ -131,6 +140,7 @@ void GameScene::OnCollision() {
 		}
 	}
 	if (areaItemCollisionTimeFlag == 1) {
+		enemyBossOne_->Update();
 		areaItemCollisionTime++;
 	}
 	if (areaItemCollisionTime >= areaItemCollisionTimeCount) {
@@ -176,6 +186,8 @@ void GameScene::OnCollision() {
 	skydome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 	areaItem_->Draw(viewProjection_, areaItemCollisionFlag);
+	enemyBossOne_->Draw(viewProjection_, areaItemCollisionFlag);
+
 	Model::PostDraw();
 
 

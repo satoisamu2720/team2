@@ -8,6 +8,7 @@
 #include "PlayerBullet.h"
 #include <list>
 #include "RailCamera.h"
+#include "VectraCalculation.h"
 #include "math.h"
 
 class Player {

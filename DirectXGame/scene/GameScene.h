@@ -15,6 +15,7 @@
 #include "FollowCamera.h"
 #include "Ground.h"
 #include "AreaItem.h"
+#include "EnemyBossOne.h"
 #include <memory>
 #include "ImGuiManager.h"
 
@@ -74,6 +75,7 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterL_feet_;
 	std::unique_ptr<Model> modelFighterR_feet_;
 	std::unique_ptr<Model> modelAreaItem_;
+	std::unique_ptr<Model> modelEnemyBossOne_;
 
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
@@ -87,6 +89,8 @@ private: // メンバ変数
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Skydome>skydome_;
 	std::unique_ptr<AreaItem> areaItem_;
+	std::unique_ptr<EnemyBossOne> enemyBossOne_;
+
 
 	Model* modelSkydome_ = nullptr;
 	std::unique_ptr<Ground> ground_;
