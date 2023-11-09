@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	areaItem_ = std::make_unique<AreaItem>();
-	areaItem_->Initialize(modelAreaItem_.get(), {3.0f, 0.0f, 0.0f});
+	areaItem_->Initialize(modelAreaItem_.get(), {10.0f, 0.0f, 0.0f});
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 
