@@ -4,10 +4,10 @@
 #include "AxisIndicator.h"
 #include "VectraCalculation.h"
 
-GameScene::GameScene() {}
+GameScene::GameScene() {
+}
 
 GameScene::~GameScene() {
-	
 }
 
 void GameScene::Initialize() {
@@ -23,6 +23,9 @@ void GameScene::Initialize() {
 	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
 
 	modelBoss_.reset(Model::CreateFromOBJ("Boss", true));
+
+		modelLotEnemy_.reset(Model::CreateFromOBJ("lotenemy", true));
+	
 
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
@@ -44,6 +47,10 @@ void GameScene::Initialize() {
 
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize(modelBoss_.get());
+
+		lotenemy_ = std::make_unique<Boss>();
+		lotenemy_->Initialize(modelLotEnemy_.get());
+	
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
@@ -71,6 +78,8 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	player_->Update(); 
 	boss_->Update();
+
+
 	skydome_->Update();
 	ground_->Update();
 	
@@ -143,6 +152,7 @@ void GameScene::Update() {
 	// 3Dオブジェクト描画後処理
 	player_->Draw(viewProjection_);
 	boss_->Draw(viewProjection_);
+
 	skydome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 	Model::PostDraw();
