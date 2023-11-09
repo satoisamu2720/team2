@@ -23,6 +23,7 @@ void GameScene::Initialize() {
 	modelFighterR_arm_.reset(Model::CreateFromOBJ("arm_right", true));
 	modelFighterL_feet_.reset(Model::CreateFromOBJ("feet_left", true));
 	modelFighterR_feet_.reset(Model::CreateFromOBJ("feet_right", true));
+	modelAreaItem_.reset(Model::CreateFromOBJ("body", true));
 
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
@@ -57,6 +58,8 @@ void GameScene::Initialize() {
 	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, 0.0f});
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
+	areaItem_ = std::make_unique<AreaItem>();
+	areaItem_->Initialize(modelAreaItem_.get(), {3.0f, 0.0f, 0.0f});
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 
@@ -72,7 +75,7 @@ void GameScene::Update() {
 	player_->Update(); 
 	skydome_->Update();
 	ground_->Update();
-	
+	areaItem_->Update();
 	
 	
 	debugCamera_->Update();
@@ -110,9 +113,37 @@ void GameScene::Update() {
 		
 
 	}
-	
+	OnCollision();
 }
+void GameScene::OnCollision() {
 
+	
+	if (areaItemCollisionFlag == 1) {
+		// 差を求める
+		float dx = abs(
+		    player_->GetWorldTransform().translation_.x - areaItem_->GetItemWorldTransform().translation_.x);
+		float dz =
+		    abs(player_->GetWorldTransform().translation_.z - areaItem_->GetItemWorldTransform().translation_.z);
+		// 衝突したら
+		if (dx < 2 && dz < 2) {
+			areaItemCollisionTimeFlag = 1;
+			areaItemCollisionFlag = 0;
+		}
+	}
+	if (areaItemCollisionTimeFlag == 1) {
+		areaItemCollisionTime++;
+	}
+	if (areaItemCollisionTime >= areaItemCollisionTimeCount) {
+		areaItemCollisionTimeFlag = 0;
+		areaItemCollisionTime = 0;
+		areaItemCollisionFlag = 1;
+	}
+	ImGui::Begin("Debug");
+	ImGui::InputInt("areaItemCollisionFlag", &areaItemCollisionFlag);
+	ImGui::InputInt("areaItemCollisionTimeFlag", &areaItemCollisionTimeFlag);
+	ImGui::InputInt("areaItemCollisionTimeCount", &areaItemCollisionTimeCount);
+	ImGui::End();
+}
 	void GameScene::Draw() {
 
 	// コマンドリストの取得
@@ -144,6 +175,7 @@ void GameScene::Update() {
 	player_->Draw(viewProjection_);
 	skydome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
+	areaItem_->Draw(viewProjection_, areaItemCollisionFlag);
 	Model::PostDraw();
 
 

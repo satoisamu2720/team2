@@ -69,7 +69,10 @@ void Player::Update() {
 	} else if (input_->PushKey(DIK_S)) {
 		move_.z -= kCharacterSpeed;
 		walkModelTimeFlag = 1;
-	}
+	} /*else {
+		worldTransformR_feet_.rotation_.x = 3.15f;
+		worldTransformL_feet_.rotation_.x = 3.15f;
+	}*/
 
 	// 押した方向で移動ベクトルを変更（左右）
 	if (input_->PushKey(DIK_A)) {

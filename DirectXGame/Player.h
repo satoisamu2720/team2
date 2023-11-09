@@ -42,7 +42,7 @@ public:
 	void SetViewProjection(const ViewProjection* viewProjection) {
 		viewProjection_ = viewProjection;
 	}
-	const WorldTransform& GetWorldTransform() { return worldTransformHead_; }
+	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
 	/// <summary>
 /// 
 /// </summary>

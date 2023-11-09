@@ -14,7 +14,9 @@
 #include "RailCamera.h"
 #include "FollowCamera.h"
 #include "Ground.h"
+#include "AreaItem.h"
 #include <memory>
+#include "ImGuiManager.h"
 
     /// <summary>
 /// ゲームシーン
@@ -53,7 +55,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 
 	/// </summary>
-	
+	void OnCollision();
 
 private: // メンバ変数
 	// テクスチャハンドル
@@ -71,6 +73,7 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterR_arm_;
 	std::unique_ptr<Model> modelFighterL_feet_;
 	std::unique_ptr<Model> modelFighterR_feet_;
+	std::unique_ptr<Model> modelAreaItem_;
 
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
@@ -83,17 +86,25 @@ private: // メンバ変数
 	std::unique_ptr<DebugCamera> debugCamera_;
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Skydome>skydome_;
+	std::unique_ptr<AreaItem> areaItem_;
+
 	Model* modelSkydome_ = nullptr;
 	std::unique_ptr<Ground> ground_;
 	Model* modelGround_ = nullptr;
 	
 	Vector3 velocity_;
 
+	
 	//const WorldTransform& GetWorldTransform() { return matProjection; }
 
 	bool isDebugCameraActive_ = false;
 	std::unique_ptr<RailCamera> railCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
+
+		int areaItemCollisionFlag = 1;
+		int areaItemCollisionTimeFlag = 0;
+	    int areaItemCollisionTime = 0;
+	    int areaItemCollisionTimeCount = 60;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
