@@ -74,6 +74,7 @@ private:
 	int StopTimer = 0;
 	RailCamera* railCamera_;
 	FollowCamera* followCamera_;
+	int playerJumpFlag = 0;
 	// キャラクターの移動ベクトル
 	
 	Vector3 velocity_ = {0, 0, 0};

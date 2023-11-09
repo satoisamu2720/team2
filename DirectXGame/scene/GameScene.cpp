@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
 	ground_ = std::make_unique<Ground>();
-	ground_->Initialize(modelGround_, {0.0f,0.0f,0.0f});
+	ground_->Initialize(modelGround_, {0.0f,-0.2f,0.0f});
 	
 	railCamera_ = std::make_unique<RailCamera>();
 	railCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});

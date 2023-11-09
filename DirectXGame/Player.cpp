@@ -84,9 +84,18 @@ void Player::Update() {
 	}
 
 	if (input_->PushKey(DIK_SPACE)) {
-		move_.y += kCharacterSpeed;
+		playerJumpFlag = 1;
+		
 	}
-
+	if (playerJumpFlag == 1) {
+		move_.y += kCharacterSpeed*2;
+	}
+	if (worldTransformHead_.translation_.y >= 10.0f) {
+		playerJumpFlag = 0;
+	}
+	if (playerJumpFlag == 0 && worldTransformHead_.translation_.y >= 0) {
+		move_.y -= kCharacterSpeed*2;
+	}
 	if (walkModelTimeFlag == 1) {
 		walkModelTime++;
 		if (walkModelTime <= 8) {
@@ -165,16 +174,16 @@ void Player::Update() {
 
 
 	float imputFloat3[3] = {
-	    worldTransformR_feet_.rotation_.x, worldTransformL_feet_.rotation_.x,
-	    worldTransform_.rotation_.z};
+	    worldTransformHead_.rotation_.x, worldTransformHead_.rotation_.y,
+	    worldTransformHead_.rotation_.z};
 
 	//デバッグ
 	ImGui::Begin("Debug");
 	ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
 	ImGui::SliderFloat3("player", imputFloat3, -30.0f, 30.0f);
 	ImGui::End();
-	worldTransformR_feet_.rotation_.x = imputFloat3[0];
-	worldTransformL_feet_.rotation_.x = imputFloat3[1];
+	worldTransformHead_.rotation_.x = imputFloat3[0];
+	worldTransformHead_.rotation_.y = imputFloat3[1];
 	worldTransform_.rotation_.z = imputFloat3[2];
 
 	//// 移動限界座標
