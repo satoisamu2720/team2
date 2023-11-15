@@ -1,9 +1,11 @@
 ﻿#include "Boss.h"
 
-void Boss::Initialize(Model* model) {
+void Boss::Initialize(Model* modelB, Model* modelE) {
 	// NULLポインタチェック
-	assert(model);
-	 model_= model;
+	assert(modelB);
+	 modelB_= modelB;
+	assert(modelE);
+	modelE_ = modelE;
 
 	worldTransform_.Initialize();
 	 RotateSpeed = 0.01f;
@@ -39,7 +41,7 @@ void Boss::Update() {
 
 void Boss::Draw(const ViewProjection& viewProjection_) {
 	// 3Dモデルを描画
-	model_->Draw(worldTransform_, viewProjection_);
+	modelB_->Draw(worldTransform_, viewProjection_);
 
 	// 小さい敵の描画複数
 	for (LotEnemy* enemynum : enemyNums_) {
@@ -58,7 +60,7 @@ void Boss::Timing() {
 		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 		// 敵の生成
 		LotEnemy* newEnemynum = new LotEnemy();
-		newEnemynum->Initialize(model_, worldTransform_.translation_,velocity);
+		newEnemynum->Initialize(modelE_, worldTransform_.translation_,velocity);
 		// 敵の登録
 		enemyNums_.push_back(newEnemynum);
 		TimingTimer = 60;

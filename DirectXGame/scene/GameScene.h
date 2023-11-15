@@ -74,7 +74,6 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterR_arm_;
 	
 	std::unique_ptr<Model> modelBoss_;
-
 	std::unique_ptr<Model> modelLotEnemy_;
 	
 	WorldTransform worldTransform_;
@@ -88,7 +87,7 @@ private: // メンバ変数
 	std::unique_ptr<DebugCamera> debugCamera_;
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Boss> boss_;
-	std::unique_ptr<Boss> lotenemy_;
+	//std::unique_ptr<Boss> lotenemy_;
 	std::unique_ptr<Skydome>skydome_;
 	Model* modelSkydome_ = nullptr;
 	std::unique_ptr<Ground> ground_;

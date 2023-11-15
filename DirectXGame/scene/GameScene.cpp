@@ -46,10 +46,10 @@ void GameScene::Initialize() {
 		bodyPosition, headPosition, l_amrPosition, r_amrPosition);
 
 	boss_ = std::make_unique<Boss>();
-	boss_->Initialize(modelBoss_.get());
+	boss_->Initialize(modelBoss_.get(), modelLotEnemy_.get());
 
-		lotenemy_ = std::make_unique<Boss>();
-		lotenemy_->Initialize(modelLotEnemy_.get());
+		/*lotenemy_ = std::make_unique<Boss>();
+		lotenemy_->Initialize(modelLotEnemy_.get());*/
 	
 
 	skydome_ = std::make_unique<Skydome>();
