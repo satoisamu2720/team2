@@ -1,5 +1,10 @@
+<<<<<<<< HEAD:DirectXGame/Resources/BOSS/BOSS.mtl
+# Blender 3.6.5 MTL File: 'None'
+# www.blender.org
+========
 # Blender MTL File: 'Player.blend'
 # Material Count: 1
+>>>>>>>> PlayerJump:DirectXGame/Resources/head/head.mtl
 
 newmtl Material
 Ns 250.000000

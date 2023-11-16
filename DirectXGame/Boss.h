@@ -29,5 +29,5 @@ public:
 	// 小さい敵を複数にする
 	std ::list<LotEnemy*> enemyNums_;
 	//
-	int TimingTimer;
+	int TimingTimer=60;
 };

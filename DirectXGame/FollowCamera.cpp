@@ -38,13 +38,28 @@ void FollowCamera::Update() {
 		viewProjection_.translation_ = Add(target_->translation_, offset_);
 		
 	}
-	
-	
+
 	viewProjection_.UpdateMatrix();
 
 	
+	float translation_[3] = {
+	    worldTransform_.translation_.x, worldTransform_.translation_.y,
+	    worldTransform_.translation_.z
+	};
+	float rotation_[3] = {
+	    viewProjection_.rotation_.x, viewProjection_.rotation_.y, viewProjection_.rotation_.z
+	};
+	
 	ImGui::Begin("offset Camera");
-	ImGui::DragFloat3("Camera Position", &viewProjection_.translation_.x, 0.01f);
-	ImGui::DragFloat3("Camera Rotation", &viewProjection_.rotation_.x, 0.01f);
+	ImGui::DragFloat3("Camera Translation_", translation_, 0.01f,30.0f);
+	ImGui::DragFloat3("Camera Rotation", rotation_, 0.01f, 30.0f);
 	ImGui::End();
+
+	/*viewProjection_.translation_.x = translation_[0];
+	viewProjection_.translation_.y = translation_[1];
+	viewProjection_.translation_.z = translation_[2];*/
+
+	viewProjection_.rotation_.x = rotation_[0];
+	viewProjection_.rotation_.y = rotation_[1];
+	viewProjection_.rotation_.z = rotation_[2];
 }

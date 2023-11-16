@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Player.h"
-#include "VectraCalculation.h"
+
 
 Player::~Player() {
 
@@ -9,8 +9,9 @@ Player::~Player() {
 
 void Player::Initialize(
 	Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm, Model* modelL_feet,
-	Model* modelR_feet, Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition,
-	Vector3 R_armPosition, Vector3 L_feetPosition, Vector3 R_feetPosition) {
+    Model* modelR_feet, Model* modelAttack, Vector3 BodyPosition, Vector3 HeadPosition,
+    Vector3 L_armPosition,
+    Vector3 R_armPosition, Vector3 L_feetPosition, Vector3 R_feetPosition, Vector3 AttackPosition) {
 
 	assert(modelBody);
 	assert(modelHead);
@@ -18,6 +19,7 @@ void Player::Initialize(
 	assert(modelR_arm);
 	assert(modelL_feet);
 	assert(modelR_feet);
+	assert(modelAttack);
 
 	modelFighterBody_ = modelBody;
 	modelFighterHead_ = modelHead;
@@ -25,6 +27,7 @@ void Player::Initialize(
 	modelFighterR_arm_ = modelR_arm;
 	modelFighterL_feet_ = modelL_feet;
 	modelFighterR_feet_ = modelR_feet;
+	modelAttack_ = modelAttack;
 
 	worldTransform_.Initialize();
 	worldTransformBody_.Initialize();
@@ -33,6 +36,7 @@ void Player::Initialize(
 	worldTransformR_arm_.Initialize();
 	worldTransformL_feet_.Initialize();
 	worldTransformR_feet_.Initialize();
+	worldTransformAttack_.Initialize();
 
 
 	worldTransformBody_.translation_ = BodyPosition;
@@ -50,7 +54,7 @@ void Player::Initialize(
 	worldTransformR_arm_.translation_ = Add(worldTransformR_arm_.translation_, R_armPosition);
 	worldTransformL_feet_.translation_ = Add(worldTransformL_feet_.translation_, L_feetPosition);
 	worldTransformR_feet_.translation_ = Add(worldTransformR_feet_.translation_, R_feetPosition);
-
+	worldTransformAttack_.translation_ = Add(worldTransformAttack_.translation_, AttackPosition);
 };
 
 void Player::Update() {
@@ -69,7 +73,10 @@ void Player::Update() {
 	} else if (input_->PushKey(DIK_S)) {
 		move_.z -= kCharacterSpeed;
 		walkModelTimeFlag = 1;
-	}
+	} /*else {
+		worldTransformR_feet_.rotation_.x = 3.15f;
+		worldTransformL_feet_.rotation_.x = 3.15f;
+	}*/
 
 	// 押した方向で移動ベクトルを変更（左右）
 	if (input_->PushKey(DIK_A)) {
@@ -79,7 +86,20 @@ void Player::Update() {
 		walkModelTimeFlag = 1;
 		move_.x += kCharacterSpeed;
 	}
-
+	Attack();
+	if (input_->PushKey(DIK_SPACE)) {
+		playerJumpFlag = 1;
+		
+	}
+	if (playerJumpFlag == 1) {
+		move_.y += kCharacterSpeed*2;
+	}
+	if (worldTransformHead_.translation_.y >= 10.0f) {
+		playerJumpFlag = 0;
+	}
+	if (playerJumpFlag == 0 && worldTransformHead_.translation_.y >= 0) {
+		move_.y -= kCharacterSpeed*2;
+	}
 	if (walkModelTimeFlag == 1) {
 		walkModelTime++;
 		if (walkModelTime <= 8) {
@@ -156,18 +176,25 @@ void Player::Update() {
 	// 行列更新
 	worldTransformR_feet_.UpdateMatrix();
 
+	// Y軸周り角度
+	worldTransformAttack_.rotation_.y = std::atan2(move_.x, move_.z);
+	// ベクターの加算
+	worldTransformAttack_.translation_ = Add(worldTransformAttack_.translation_, move_);
+	// 行列更新
+	worldTransformAttack_.UpdateMatrix();
+
 
 	float imputFloat3[3] = {
-	    worldTransformR_feet_.rotation_.x, worldTransformL_feet_.rotation_.x,
-	    worldTransform_.rotation_.z};
+	    worldTransformHead_.rotation_.x, worldTransformHead_.rotation_.y,
+	    worldTransformHead_.rotation_.z};
 
 	//デバッグ
 	ImGui::Begin("Debug");
 	ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
 	ImGui::SliderFloat3("player", imputFloat3, -30.0f, 30.0f);
 	ImGui::End();
-	worldTransformR_feet_.rotation_.x = imputFloat3[0];
-	worldTransformL_feet_.rotation_.x = imputFloat3[1];
+	worldTransformHead_.rotation_.x = imputFloat3[0];
+	worldTransformHead_.rotation_.y = imputFloat3[1];
 	worldTransform_.rotation_.z = imputFloat3[2];
 
 	//// 移動限界座標
@@ -183,6 +210,15 @@ void Player::Update() {
 	
 }
 
+void Player::Attack() {
+	if (input_->PushKey(DIK_L)) {
+		playerAttackFlag = 1;
+	} else {
+		playerAttackFlag = 0;
+	}
+
+}
+
 void Player::Draw(ViewProjection view) { 
 
 	modelFighterBody_->Draw(worldTransformBody_, view);
@@ -191,6 +227,9 @@ void Player::Draw(ViewProjection view) {
 	modelFighterR_arm_->Draw(worldTransformR_arm_, view);
 	modelFighterL_feet_->Draw(worldTransformL_feet_, view);
 	modelFighterR_feet_->Draw(worldTransformR_feet_, view);
+	if (playerAttackFlag == 1) {
+		modelAttack_->Draw(worldTransformAttack_, view);
+	}
 	
 };
 void Player::OnCollision() {  }
