@@ -17,10 +17,16 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	textureHandle_ = TextureManager::Load("genshin.png");
 
-	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
-	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
-	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
-	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
+	modelFighterBody_.reset(Model::CreateFromOBJ("body", true));
+	modelFighterHead_.reset(Model::CreateFromOBJ("head", true));
+	modelFighterL_arm_.reset(Model::CreateFromOBJ("arm_left", true));
+	modelFighterR_arm_.reset(Model::CreateFromOBJ("arm_right", true));
+	modelFighterL_feet_.reset(Model::CreateFromOBJ("feet_left", true));
+	modelFighterR_feet_.reset(Model::CreateFromOBJ("feet_right", true));
+	modelAreaItem_.reset(Model::CreateFromOBJ("body", true));
+	modelEnemyBossOne_.reset(Model::CreateFromOBJ("feet_right", true));
+	modelPlayerAttack_.reset(Model::CreateFromOBJ("head", true));
+	
 
 	modelBoss_.reset(Model::CreateFromOBJ("Boss", true));
 
@@ -35,15 +41,19 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = std::make_unique<Player>();
-	Vector3 bodyPosition(0, -1, 0);
-	Vector3 headPosition(0, -0.5f, 0);
-	Vector3 l_amrPosition(-0.2f, -0.5f, 0);
-	Vector3 r_amrPosition(0.2f, -0.5f, 0);
+	Vector3 bodyPosition(0, 0, 0);
+	Vector3 headPosition(0, 0, 0);
+	Vector3 l_amrPosition(0, 0, 0);
+	Vector3 r_amrPosition(0, 0, 0);
+	Vector3 l_feetPosition(0, 1.7f, 0);
+	Vector3 r_feetPosition(0, 1.7f, 0);
+	Vector3 attackPosition(0, -2.0f,5.0f);
 	// 自キャラの初期化
 	player_->Initialize(
-		modelFighterBody_.get(), modelFighterHead_.get(), 
-		modelFighterL_arm_.get(),modelFighterR_arm_.get(), 
-		bodyPosition, headPosition, l_amrPosition, r_amrPosition);
+		modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
+	    modelFighterR_arm_.get(), modelFighterL_feet_.get(), modelFighterR_feet_.get(),
+	    modelPlayerAttack_.get(),
+	    bodyPosition, headPosition, l_amrPosition, r_amrPosition, l_feetPosition, r_feetPosition, attackPosition);
 
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize(modelBoss_.get(), modelLotEnemy_.get());
@@ -55,15 +65,25 @@ void GameScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
 	ground_ = std::make_unique<Ground>();
-	ground_->Initialize(modelGround_, {1.0f,-2.0f,0.0f});
+	ground_->Initialize(modelGround_, {0.0f,-0.2f,0.0f});
 	
 	railCamera_ = std::make_unique<RailCamera>();
 	railCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
 
 	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, 0.0f});
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
+	areaItem_ = std::make_unique<AreaItem>();
+	areaItem_->Initialize(modelAreaItem_.get(), {10.0f, 0.0f, 0.0f});
+
+	enemyBossOne_ = std::make_unique<EnemyBossOne>();
+	enemyBossOne_->Initialize( modelEnemyBossOne_.get(), {
+		areaItem_->GetItemWorldTransform().translation_.x,
+		10.0f,
+		areaItem_->GetItemWorldTransform().translation_.z
+		}
+	);
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 
@@ -83,15 +103,16 @@ void GameScene::Update() {
 
 	skydome_->Update();
 	ground_->Update();
+	areaItem_->Update();
 	
 	
 	debugCamera_->Update();
 	//デバックカメラのifdef
 
 	#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == false) {
+	if (input_->TriggerKey(DIK_0) && isDebugCameraActive_ == false) {
 		isDebugCameraActive_ = true;
-	} else if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == true) {
+	} else if (input_->TriggerKey(DIK_0) && isDebugCameraActive_ == true) {
 		isDebugCameraActive_ = false;
 		
 	}
@@ -120,9 +141,51 @@ void GameScene::Update() {
 		
 
 	}
-	
+	OnCollision();
 }
-
+void GameScene::OnCollision() {
+	if (areaItemCollisionFlag == 1 && player_->GetPlayerAttackFlag() == 1) {
+		// 差を求める
+		float dx =
+		    abs(player_->GetAttack().translation_.x -
+		        areaItem_->GetItemWorldTransform().translation_.x);
+		float dz =
+		    abs(player_->GetAttack().translation_.z -
+		        areaItem_->GetItemWorldTransform().translation_.z);
+		// 衝突したら
+		if (dx < 2 && dz < 2) {
+			areaItemCollisionTimeFlag = 1;
+			areaItemCollisionFlag = 0;
+		}
+	}
+	
+	if (areaItemCollisionFlag == 1) {
+		// 差を求める
+		float dx = abs(
+		    player_->GetWorldTransform().translation_.x - areaItem_->GetItemWorldTransform().translation_.x);
+		float dz =
+		    abs(player_->GetWorldTransform().translation_.z - areaItem_->GetItemWorldTransform().translation_.z);
+		// 衝突したら
+		if (dx < 2 && dz < 1) {
+			areaItemCollisionTimeFlag = 1;
+			areaItemCollisionFlag = 0;
+		}
+	}
+	if (areaItemCollisionTimeFlag == 1) {
+		enemyBossOne_->Update();
+		areaItemCollisionTime++;
+	}
+	if (areaItemCollisionTime >= areaItemCollisionTimeCount) {
+		areaItemCollisionTimeFlag = 0;
+		areaItemCollisionTime = 0;
+		areaItemCollisionFlag = 1;
+	}
+	ImGui::Begin("Debug");
+	ImGui::InputInt("areaItemCollisionFlag", &areaItemCollisionFlag);
+	ImGui::InputInt("areaItemCollisionTimeFlag", &areaItemCollisionTimeFlag);
+	ImGui::InputInt("areaItemCollisionTimeCount", &areaItemCollisionTimeCount);
+	ImGui::End();
+}
 	void GameScene::Draw() {
 
 	// コマンドリストの取得
@@ -156,6 +219,9 @@ void GameScene::Update() {
 
 	skydome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
+	areaItem_->Draw(viewProjection_, areaItemCollisionFlag);
+	enemyBossOne_->Draw(viewProjection_, areaItemCollisionFlag);
+
 	Model::PostDraw();
 
 
