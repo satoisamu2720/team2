@@ -36,8 +36,8 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	Vector3 bodyPosition(0, 0, 0);
 	Vector3 headPosition(0, 0, 0);
-	Vector3 l_amrPosition(0, 0, 0);
-	Vector3 r_amrPosition(0, 0, 0);
+	Vector3 l_amrPosition(0, 4.7f, 0);
+	Vector3 r_amrPosition(0, 4.7f, 0);
 	Vector3 l_feetPosition(0, 1.7f, 0);
 	Vector3 r_feetPosition(0, 1.7f, 0);
 	Vector3 attackPosition(0, -2.0f,5.0f);

@@ -44,6 +44,9 @@ void Player::Initialize(
 	worldTransformR_arm_.translation_ = R_armPosition;
 	worldTransformL_feet_.translation_ = L_feetPosition;
 	worldTransformR_feet_.translation_ = R_feetPosition;
+
+	worldTransformL_arm_.rotation_.x = 3.15f;
+	worldTransformR_arm_.rotation_ .x= 3.15f;
 	worldTransformR_feet_.rotation_.x = 3.15f;
 	worldTransformL_feet_.rotation_.x = 3.15f;
 	input_ = Input::GetInstance();
@@ -212,6 +215,7 @@ void Player::Update() {
 void Player::Attack() {
 	if (input_->PushKey(DIK_L)) {
 		playerAttackFlag = 1;
+		worldTransformR_arm_.rotation_.x -= 0.1f;
 	} else {
 		playerAttackFlag = 0;
 	}
