@@ -93,7 +93,6 @@ private: // メンバ変数
 	std::unique_ptr<Ground> ground_;
 	Model* modelGround_ = nullptr;
 	
-	
 
 	Vector3 velocity_;
 
