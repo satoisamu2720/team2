@@ -38,7 +38,7 @@ void Player::Initialize(
 	worldTransformR_feet_.Initialize();
 	worldTransformAttack_.Initialize();
 
-	Vector3 basePosition(0, 10, 0);
+	Vector3 basePosition(0, 4, 0);
 	worldTransform_.translation_ = basePosition;
 	worldTransformBody_.translation_ = BodyPosition;
 	worldTransformHead_.translation_ = HeadPosition;
@@ -51,7 +51,7 @@ void Player::Initialize(
 	
 	
 	input_ = Input::GetInstance();
-	worldTransform_.translation_ = Add(worldTransform_.translation_, basePosition);
+	worldTransform_.translation_ = basePosition;
 	worldTransformBody_.parent_ = &worldTransform_;
 	worldTransformHead_.parent_ = &worldTransform_;
 	worldTransformL_arm_.parent_ = &worldTransform_;
@@ -182,8 +182,8 @@ void Player::Update() {
 	Attack();
 
 	float inputFloat3[3] = {
-	    worldTransformAttack_.translation_.x, worldTransformAttack_.translation_.y,
-	    worldTransformAttack_.translation_.z};
+	    worldTransform_.translation_.x, worldTransform_.translation_.y,
+	    worldTransform_.translation_.z};
 
 	//デバッグ
 	ImGui::Begin("Debug");
@@ -191,9 +191,9 @@ void Player::Update() {
 	ImGui::InputInt("playerAttackFlag", &playerAttackFlag);
 	ImGui::SliderFloat3("player", inputFloat3, -30.0f, 30.0f);
 	ImGui::End();
-	worldTransformAttack_.translation_.x = inputFloat3[0];
-	worldTransformAttack_.translation_.y = inputFloat3[1];
-	worldTransformAttack_.translation_.z = inputFloat3[2];
+	worldTransform_.translation_.x = inputFloat3[0];
+	worldTransform_.translation_.y = inputFloat3[1];
+	worldTransform_.translation_.z = inputFloat3[2];
 
 	//// 移動限界座標
 	//const float kMoveLimitX = 34;
