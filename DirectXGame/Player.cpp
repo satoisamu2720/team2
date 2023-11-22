@@ -38,16 +38,27 @@ void Player::Initialize(
 	worldTransformR_feet_.Initialize();
 	worldTransformAttack_.Initialize();
 
-
+	Vector3 basePosition(0, 4, 0);
+	worldTransform_.translation_ = basePosition;
 	worldTransformBody_.translation_ = BodyPosition;
 	worldTransformHead_.translation_ = HeadPosition;
 	worldTransformL_arm_.translation_ = L_armPosition;
 	worldTransformR_arm_.translation_ = R_armPosition;
 	worldTransformL_feet_.translation_ = L_feetPosition;
 	worldTransformR_feet_.translation_ = R_feetPosition;
-	worldTransformR_feet_.rotation_.x = 3.15f;
-	worldTransformL_feet_.rotation_.x = 3.15f;
+	worldTransformAttack_.translation_ = AttackPosition;
+
+	
+	
 	input_ = Input::GetInstance();
+	worldTransform_.translation_ = basePosition;
+	worldTransformBody_.parent_ = &worldTransform_;
+	worldTransformHead_.parent_ = &worldTransform_;
+	worldTransformL_arm_.parent_ = &worldTransform_;
+	worldTransformR_arm_.parent_ = &worldTransform_;
+	worldTransformL_feet_.parent_ = &worldTransform_;
+	worldTransformR_feet_.parent_ = &worldTransform_;
+	worldTransformAttack_.parent_ = &worldTransform_;
 	worldTransformBody_.translation_ = Add(worldTransformBody_.translation_, BodyPosition);
 	worldTransformHead_.translation_ = Add(worldTransformHead_.translation_, HeadPosition);
 	worldTransformL_arm_.translation_ = Add(worldTransformL_arm_.translation_, L_armPosition);
@@ -74,10 +85,7 @@ void Player::Update() {
 	} else if (input_->PushKey(DIK_S)) {
 		move_.z -= kCharacterSpeed;
 		walkModelTimeFlag = 1;
-	} /*else {
-		worldTransformR_feet_.rotation_.x = 3.15f;
-		worldTransformL_feet_.rotation_.x = 3.15f;
-	}*/
+	} 
 
 	// 押した方向で移動ベクトルを変更（左右）
 	if (input_->PushKey(DIK_A)) {
@@ -87,116 +95,113 @@ void Player::Update() {
 		walkModelTimeFlag = 1;
 		move_.x += kCharacterSpeed;
 	}
-	Attack();
-	if (input_->PushKey(DIK_SPACE)) {
-		playerJumpFlag = 1;
-		
-	}
-	if (playerJumpFlag == 1) {
-		move_.y += kCharacterSpeed*2;
-	}
-	if (worldTransformHead_.translation_.y >= 10.0f) {
-		playerJumpFlag = 0;
-	}
-	if (playerJumpFlag == 0 && worldTransformHead_.translation_.y >= 0) {
-		move_.y -= kCharacterSpeed*2;
-	}
+	
+
+
 	if (walkModelTimeFlag == 1) {
 		walkModelTime++;
 		if (walkModelTime <= 8) {
 			worldTransformL_feet_.rotation_.x += 0.1f;
 			worldTransformR_feet_.rotation_.x -= 0.1f;
+			worldTransformL_arm_.rotation_.x -= 0.1f;
+			worldTransformR_arm_.rotation_.x += 0.1f;
 		}
 		if (walkModelTime >= 16 && walkModelTime <= 24) {
 			worldTransformL_feet_.rotation_.x -= 0.1f;
 			worldTransformR_feet_.rotation_.x += 0.1f;
+			worldTransformL_arm_.rotation_.x += 0.1f;
+			worldTransformR_arm_.rotation_.x -= 0.1f;
 		} 
 		if (walkModelTime >= 24 && walkModelTime <= 32) {
 			worldTransformL_feet_.rotation_.x -= 0.1f;
 			worldTransformR_feet_.rotation_.x += 0.1f;
+			worldTransformL_arm_.rotation_.x += 0.1f;
+			worldTransformR_arm_.rotation_.x -= 0.1f;
 		} 
 		if (walkModelTime >= 32) {
 			worldTransformL_feet_.rotation_.x += 0.1f;
 			worldTransformR_feet_.rotation_.x -= 0.1f;
+			worldTransformL_arm_.rotation_.x -= 0.1f;
+			worldTransformR_arm_.rotation_.x += 0.1f;
 		}
 		if (walkModelTime == 40) {
-			worldTransformR_feet_.rotation_.x = 3.15f;
-			worldTransformL_feet_.rotation_.x = 3.15f;
+			worldTransformR_feet_.rotation_.x = 0;
+			worldTransformL_feet_.rotation_.x = 0;
+			worldTransformL_arm_.rotation_.x  = 0;
+			worldTransformR_arm_.rotation_.x = 0;
 			walkModelTime = 0;
 			walkModelTimeFlag = 0;
 		}
 	} else {
+		
 		walkModelTime = 0;
 		walkModelTimeFlag = 0;
 	}
 
 	move_ = TransformNormal(move_, MakeRotateYMatrix(viewProjection_->rotation_.y));
+
+	///ベース
 	// Y軸周り角度
-	worldTransformBody_.rotation_.y = std::atan2(move_.x, move_.z);
+	worldTransform_.rotation_.y = std::atan2(move_.x, move_.z);
 	// ベクターの加算
-	worldTransformBody_.translation_ = Add(worldTransformBody_.translation_, move_);
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move_);
+
+	/////左腕
+	//// Y軸周り角度
+	//worldTransformL_arm_.rotation_.y = std::atan2(move_.x, move_.z);
+	//// ベクターの加算
+	//worldTransformL_arm_.translation_ = Add(worldTransformL_arm_.translation_, move_);
+
+	/////右腕
+	//// Y軸周り角度
+	//worldTransformR_arm_.rotation_.y = std::atan2(move_.x, move_.z);
+	//// ベクターの加算
+	//worldTransformR_arm_.translation_ = Add(worldTransformR_arm_.translation_, move_);
+
+	/////左脚
+	//// Y軸周り角度
+	//worldTransformL_feet_.rotation_.y = std::atan2(move_.x, move_.z);
+	//// ベクターの加算
+	//worldTransformL_feet_.translation_ = Add(worldTransformL_feet_.translation_, move_);
+
+	/////右脚
+	//// Y軸周り角度
+	//worldTransformR_feet_.rotation_.y = std::atan2(move_.x, move_.z);
+	//// ベクターの加算
+	//worldTransformR_feet_.translation_ = Add(worldTransformR_feet_.translation_, move_);
+
+	/////攻撃
+	//// Y軸周り角度
+	//worldTransformAttack_.rotation_.y = std::atan2(move_.x, move_.z);
+	//// ベクターの加算
+	//worldTransformAttack_.translation_ = Add(worldTransformAttack_.translation_, move_);
+
+
 	// 行列更新
+	worldTransform_.UpdateMatrix();
 	worldTransformBody_.UpdateMatrix();
-
-
-	// Y軸周り角度
-	worldTransformHead_.rotation_.y = std::atan2(move_.x, move_.z);
-	// ベクターの加算
-	worldTransformHead_.translation_ = Add(worldTransformHead_.translation_, move_);
-	// 行列更新
 	worldTransformHead_.UpdateMatrix();
-
-
-	// Y軸周り角度
-	worldTransformL_arm_.rotation_.y = std::atan2(move_.x, move_.z);
-	// ベクターの加算
-	worldTransformL_arm_.translation_ = Add(worldTransformL_arm_.translation_, move_);
-	// 行列更新
 	worldTransformL_arm_.UpdateMatrix();
-
-
-	// Y軸周り角度
-	worldTransformR_arm_.rotation_.y = std::atan2(move_.x, move_.z);
-	// ベクターの加算
-	worldTransformR_arm_.translation_ = Add(worldTransformR_arm_.translation_, move_);
-	// 行列更新
 	worldTransformR_arm_.UpdateMatrix();
-
-
-	// Y軸周り角度
-	worldTransformL_feet_.rotation_.y = std::atan2(move_.x, move_.z);
-	// ベクターの加算
-	worldTransformL_feet_.translation_ = Add(worldTransformL_feet_.translation_, move_);
-	// 行列更新
 	worldTransformL_feet_.UpdateMatrix();
-
-	// Y軸周り角度
-	worldTransformR_feet_.rotation_.y = std::atan2(move_.x, move_.z);
-	// ベクターの加算
-	worldTransformR_feet_.translation_ = Add(worldTransformR_feet_.translation_, move_);
-	// 行列更新
 	worldTransformR_feet_.UpdateMatrix();
-
-	// Y軸周り角度
-	worldTransformAttack_.rotation_.y = std::atan2(move_.x, move_.z);
-	// ベクターの加算
-	worldTransformAttack_.translation_ = Add(worldTransformAttack_.translation_, move_);
-	// 行列更新
 	worldTransformAttack_.UpdateMatrix();
 
+	Attack();
 
-	float imputFloat3[3] = {
-	    worldTransformHead_.rotation_.x, worldTransformHead_.rotation_.y,
-	    worldTransformHead_.rotation_.z};
+	float inputFloat3[3] = {
+	    worldTransform_.translation_.x, worldTransform_.translation_.y,
+	    worldTransform_.translation_.z};
 
 	//デバッグ
 	ImGui::Begin("Debug");
 	ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
-	ImGui::SliderFloat3("player", imputFloat3, -30.0f, 30.0f);
+	ImGui::InputInt("playerAttackFlag", &playerAttackFlag);
+	ImGui::SliderFloat3("player", inputFloat3, -30.0f, 30.0f);
 	ImGui::End();
-	worldTransformHead_.rotation_.x = imputFloat3[0];
-	worldTransformHead_.rotation_.y = imputFloat3[1];
-	worldTransform_.rotation_.z = imputFloat3[2];
+	worldTransform_.translation_.x = inputFloat3[0];
+	worldTransform_.translation_.y = inputFloat3[1];
+	worldTransform_.translation_.z = inputFloat3[2];
 
 	//// 移動限界座標
 	//const float kMoveLimitX = 34;
@@ -214,6 +219,7 @@ void Player::Update() {
 void Player::Attack() {
 	if (input_->PushKey(DIK_L)) {
 		playerAttackFlag = 1;
+		worldTransformR_arm_.rotation_.x -= 0.1f;
 	} else {
 		playerAttackFlag = 0;
 	}
@@ -243,5 +249,16 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return  worldPos;
+}
+
+Vector3 Player::GetAttackWorldPosition() {
+
+	Vector3 worldPos;
+
+	worldPos.x = worldTransformAttack_.matWorld_.m[3][0];
+	worldPos.y = worldTransformAttack_.matWorld_.m[3][1];
+	worldPos.z = worldTransformAttack_.matWorld_.m[3][2];
+
+	return worldPos;
 }
 	

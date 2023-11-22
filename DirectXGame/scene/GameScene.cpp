@@ -42,12 +42,12 @@ void GameScene::Initialize() {
 
 	player_ = std::make_unique<Player>();
 	Vector3 bodyPosition(0, 0, 0);
-	Vector3 headPosition(0, 0, 0);
-	Vector3 l_amrPosition(0, 0, 0);
-	Vector3 r_amrPosition(0, 0, 0);
-	Vector3 l_feetPosition(0, 1.7f, 0);
-	Vector3 r_feetPosition(0, 1.7f, 0);
-	Vector3 attackPosition(0, -2.0f,5.0f);
+	Vector3 headPosition(0, 2.5f, 0);
+	Vector3 l_amrPosition(-1.5f, 1, 0);
+	Vector3 r_amrPosition(1.5f, 1, 0);
+	Vector3 l_feetPosition(-0.5f, -2, 0);
+	Vector3 r_feetPosition(0.5f, -2, 0);
+	Vector3 attackPosition(0.0f ,-2.0f ,3.0f);
 	// 自キャラの初期化
 	player_->Initialize(
 		modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
@@ -71,7 +71,7 @@ void GameScene::Initialize() {
 	railCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
 
 	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, 0.0f});
+	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.1f, 0.0f, 0.0f});
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	areaItem_ = std::make_unique<AreaItem>();
@@ -153,10 +153,10 @@ void GameScene::ItemOnCollision() {
 	if (areaItemCollisionFlag == 1 && player_->GetPlayerAttackFlag() == 1) {
 		// 差を求める
 		float dx =
-		    abs(player_->GetAttack().translation_.x -
+		    abs(player_->GetAttackWorldPosition().x -
 		        areaItem_->GetItemWorldTransform().translation_.x);
 		float dz =
-		    abs(player_->GetAttack().translation_.z -
+		    abs(player_->GetAttackWorldPosition().z -
 		        areaItem_->GetItemWorldTransform().translation_.z);
 		// 衝突したら
 		if (dx < 2 && dz < 2) {
