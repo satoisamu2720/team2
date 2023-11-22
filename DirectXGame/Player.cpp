@@ -55,6 +55,7 @@ void Player::Initialize(
 	worldTransformL_feet_.translation_ = Add(worldTransformL_feet_.translation_, L_feetPosition);
 	worldTransformR_feet_.translation_ = Add(worldTransformR_feet_.translation_, R_feetPosition);
 	worldTransformAttack_.translation_ = Add(worldTransformAttack_.translation_, AttackPosition);
+
 };
 
 void Player::Update() {
@@ -206,7 +207,7 @@ void Player::Update() {
 	//worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
 	//worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	//worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
-
+	
 	
 }
 
@@ -232,8 +233,6 @@ void Player::Draw(ViewProjection view) {
 	}
 	
 };
-void Player::OnCollision() {  }
-
 
 Vector3 Player::GetWorldPosition() {
 

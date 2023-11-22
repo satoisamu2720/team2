@@ -10,33 +10,58 @@ void Boss::Initialize(Model* modelB, Model* modelE) {
 	worldTransform_.Initialize();
 	 RotateSpeed = 0.01f;
 	TimingTimer = 60;
+	 worldTransform_.translation_ = {0.0f, 1.0f, 30.0f};
 
+	// ライフ
+	Life_ = 3;
 
+	RespawnTime = 600;
+
+	phase_ = Phase::Attack;
 }
 
 void Boss::Update() {
 	// 行列更新
 	worldTransform_.UpdateMatrix();
-	//ボスの回転
-	worldTransform_.rotation_.y += RotateSpeed;
 
-	// デスフラグの経った敵の削除
-	enemyNums_.remove_if([](LotEnemy* enemynum) {
-		if (enemynum->IsDead()) {
-			delete enemynum;
-			return true;
+	//フェーズ
+	switch (phase_) { 
+	case Phase::Attack:
+	default:
+		// ボスの回転
+		worldTransform_.rotation_.y += RotateSpeed;
+
+		// 小さい敵の発生
+		Timing();
+		TimingTimer--;
+
+		// 小さい敵の更新
+		for (LotEnemy* enemynum : enemyNums_) {
+			enemynum->Update();
 		}
-		return false;
-	});
 
-	// 小さい敵の更新
-	for (LotEnemy* enemynum : enemyNums_) {
-		enemynum->Update();
+		break;
+
+		case Phase::noAttack:
+		// デスフラグの経った敵の削除
+		enemyNums_.remove_if([](LotEnemy* enemynum) {
+			if (enemynum->IsDead()) {
+				delete enemynum;
+				return true;
+			}
+			return false;
+		});
+		
+		//60秒経ったらまた攻撃し始める
+		RespawnTime -= 1;
+		if (RespawnTime <= 0) {
+			phase_ = Phase::Attack;
+			RespawnTime = 600;
+		}
+			break;
 	}
 
-	// 小さい敵の発生
-	Timing();
-	TimingTimer--;
+
 }
 
 void Boss::Draw(const ViewProjection& viewProjection_) {
@@ -67,3 +92,10 @@ void Boss::Timing() {
 	}
 }
 
+void Boss::ItemOnColision() {
+	//アイテムとプレイヤーが当たったら小さい敵全員が死ぬ
+	for (LotEnemy* enemynum : enemyNums_) {
+		enemynum->OnCollision();
+	}
+	phase_ = Phase::noAttack;
+}

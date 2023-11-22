@@ -9,7 +9,10 @@ public:
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
 	void Update();
 	void Draw(const ViewProjection& viewProjection_);
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision();
 
+		const WorldTransform& GetWorldTransform() { return worldTransform_; }
 	bool IsDead() const { return isDead_; }
 
 private:

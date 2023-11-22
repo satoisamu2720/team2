@@ -10,10 +10,12 @@ void LotEnemy::Initialize(Model* model,const Vector3&position,const Vector3& vel
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 
-	worldTransform_.translation_ = {0, 0, 0};
+	 worldTransform_.translation_ = {0.0f, 1.0f, 30.0f};
 
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+
+	isDead_ = false;
 }
 
 void LotEnemy::Update() {
@@ -30,6 +32,8 @@ void LotEnemy::Update() {
 	if (--deathTimer_ <= 0) {
 		isDead_ = true;
 	}
+
+	
 }
 
 void LotEnemy::Draw(const ViewProjection& viewProjection_) {
@@ -37,5 +41,7 @@ void LotEnemy::Draw(const ViewProjection& viewProjection_) {
 		model_->Draw(worldTransform_, viewProjection_);
 	
 }
+
+void LotEnemy::OnCollision() { isDead_ = true; }
 
 

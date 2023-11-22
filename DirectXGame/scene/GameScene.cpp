@@ -141,9 +141,14 @@ void GameScene::Update() {
 		
 
 	}
-	OnCollision();
+
+
+	ItemOnCollision();
+
 }
-void GameScene::OnCollision() {
+
+void GameScene::ItemOnCollision() {
+	//プレイヤーとアイテム
 	if (areaItemCollisionFlag == 1 && player_->GetPlayerAttackFlag() == 1) {
 		// 差を求める
 		float dx =
@@ -156,6 +161,7 @@ void GameScene::OnCollision() {
 		if (dx < 2 && dz < 2) {
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
+			boss_->ItemOnColision();
 		}
 	}
 	
@@ -169,6 +175,7 @@ void GameScene::OnCollision() {
 		if (dx < 2 && dz < 1) {
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
+			boss_->ItemOnColision();
 		}
 	}
 	if (areaItemCollisionTimeFlag == 1) {
@@ -177,8 +184,6 @@ void GameScene::OnCollision() {
 	}
 	if (areaItemCollisionTime >= areaItemCollisionTimeCount) {
 		areaItemCollisionTimeFlag = 0;
-		areaItemCollisionTime = 0;
-		areaItemCollisionFlag = 1;
 	}
 	ImGui::Begin("Debug");
 	ImGui::InputInt("areaItemCollisionFlag", &areaItemCollisionFlag);
@@ -186,6 +191,7 @@ void GameScene::OnCollision() {
 	ImGui::InputInt("areaItemCollisionTimeCount", &areaItemCollisionTimeCount);
 	ImGui::End();
 }
+
 	void GameScene::Draw() {
 
 	// コマンドリストの取得

@@ -56,9 +56,9 @@ public: // メンバ関数
 	void Draw();
 
 	/// <summary>
-	/// 
+	/// アイテムとプレイヤー
 	/// </summary>
-	void OnCollision();
+	void ItemOnCollision();
 
 private: // メンバ変数
 	// テクスチャハンドル
@@ -95,12 +95,11 @@ private: // メンバ変数
 	std::unique_ptr<DebugCamera> debugCamera_;
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Boss> boss_;
-	//std::unique_ptr<Boss> lotenemy_;
+	std::unique_ptr<LotEnemy> lotenemy_;
 	std::unique_ptr<Skydome>skydome_;
 	std::unique_ptr<AreaItem> areaItem_;
 	std::unique_ptr<EnemyBossOne> enemyBossOne_;
 	
-
 
 	Model* modelSkydome_ = nullptr;
 	std::unique_ptr<Ground> ground_;

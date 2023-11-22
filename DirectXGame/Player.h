@@ -34,11 +34,11 @@ public:
 	///
 	///
 	void Draw(ViewProjection view);
-	///
-	///
-	///
-	void OnCollision();
 	
+	 // ボスのライフ
+	void SetLife(int32_t Life) { Life_ = Life; };
+	int32_t GetLife() { return Life_; };
+
 	Vector3  GetWorldPosition();
 
 	void SetViewProjection(const ViewProjection* viewProjection) {
@@ -47,6 +47,7 @@ public:
 	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
 	const WorldTransform& GetAttack() { return worldTransformAttack_; }
 	const bool& GetPlayerAttackFlag() { return playerAttackFlag; }
+
 	/// <summary>
 /// 
 /// </summary>
@@ -86,4 +87,7 @@ private:
 	Vector3 velocity_ = {0, 0, 0};
 	int walkModelTime = 0;
 	int walkModelTimeFlag = 0;
+
+	// ライフ
+	int32_t Life_ = 0;
 };
