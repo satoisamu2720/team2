@@ -13,7 +13,7 @@ void FollowCamera::Update() {
 
 	
 	// 追従対象からカメラまでのオフセット
-	Vector3 offset_ = {0.0f, 10.0f, -20.0f};
+	Vector3 offset_ = {0.0f, 20.0f, -40.0f};
 	if (target_) {
 		
 

@@ -57,7 +57,7 @@ void GameScene::Initialize() {
 	railCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
 
 	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, 0.0f});
+	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.1f, 0.0f, 0.0f});
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	areaItem_ = std::make_unique<AreaItem>();

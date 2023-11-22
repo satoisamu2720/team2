@@ -6,6 +6,7 @@ void Ground::Initialize(Model* model, Vector3 position) {
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = {0.5f, 0.5f, 0.5f};
 	worldTransform_.translation_ = position;
+	worldTransform_.scale_ = {100,100,100};
 	worldTransform_.UpdateMatrix();
 }
 

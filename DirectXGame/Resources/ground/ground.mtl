@@ -1,5 +1,44 @@
-# Blender MTL File: 'wood.blend'
-# Material Count: 1
+# Blender MTL File: 'ground.blend'
+# Material Count: 5
+
+newmtl マテリアル
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump Rock050_2K-PNG_NormalGL.png
+map_Kd Rock050_2K-PNG_Color.png
+map_Ns Rock050_2K-PNG_Roughness.png
+
+newmtl マテリアル.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump Rock050_2K-PNG_NormalGL.png
+map_Kd Rock050_2K-PNG_Color.png
+map_Ns Rock050_2K-PNG_Roughness.png
+
+newmtl マテリアル.002
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump Rock050_2K-PNG_NormalGL.png
+map_Kd Rock050_2K-PNG_Color.png
+map_Ns Rock050_2K-PNG_Roughness.png
 
 newmtl マテリアル.003
 Ns 250.000000
@@ -10,5 +49,19 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd uvChecker.png
-map_d uvChecker.png
+map_Bump Rock050_2K-PNG_NormalGL.png
+map_Kd Rock050_2K-PNG_Color.png
+map_Ns Rock050_2K-PNG_Roughness.png
+
+newmtl マテリアル.004
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump Rock050_2K-PNG_NormalGL.png
+map_Kd Rock050_2K-PNG_Color.png
+map_Ns Rock050_2K-PNG_Roughness.png
