@@ -38,7 +38,7 @@ void Player::Initialize(
 	worldTransformR_feet_.Initialize();
 	worldTransformAttack_.Initialize();
 
-	Vector3 basePosition(0, 0, 0);
+	Vector3 basePosition(0, 10, 0);
 	worldTransform_.translation_ = basePosition;
 	worldTransformBody_.translation_ = BodyPosition;
 	worldTransformHead_.translation_ = HeadPosition;

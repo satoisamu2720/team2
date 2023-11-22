@@ -35,11 +35,11 @@ void GameScene::Initialize() {
 
 	player_ = std::make_unique<Player>();
 	Vector3 bodyPosition(0, 0, 0);
-	Vector3 headPosition(0, 0, 0);
-	Vector3 l_amrPosition(0, 0, 0);
-	Vector3 r_amrPosition(0, 0, 0);
-	Vector3 l_feetPosition(0, 0, 0);
-	Vector3 r_feetPosition(0, 0, 0);
+	Vector3 headPosition(0, 2.5f, 0);
+	Vector3 l_amrPosition(-1.5f, 1, 0);
+	Vector3 r_amrPosition(1.5f, 1, 0);
+	Vector3 l_feetPosition(-0.5f, -2, 0);
+	Vector3 r_feetPosition(0.5f, -2, 0);
 	Vector3 attackPosition(0.0f ,-2.0f ,3.0f);
 	// 自キャラの初期化
 	player_->Initialize(
