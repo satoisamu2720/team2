@@ -59,13 +59,6 @@ void Player::Initialize(
 	worldTransformL_feet_.parent_ = &worldTransform_;
 	worldTransformR_feet_.parent_ = &worldTransform_;
 	worldTransformAttack_.parent_ = &worldTransform_;
-	worldTransformBody_.translation_ = Add(worldTransformBody_.translation_, BodyPosition);
-	worldTransformHead_.translation_ = Add(worldTransformHead_.translation_, HeadPosition);
-	worldTransformL_arm_.translation_ = Add(worldTransformL_arm_.translation_, L_armPosition);
-	worldTransformR_arm_.translation_ = Add(worldTransformR_arm_.translation_, R_armPosition);
-	worldTransformL_feet_.translation_ = Add(worldTransformL_feet_.translation_, L_feetPosition);
-	worldTransformR_feet_.translation_ = Add(worldTransformR_feet_.translation_, R_feetPosition);
-	worldTransformAttack_.translation_ = Add(worldTransformAttack_.translation_, AttackPosition);
 
 };
 

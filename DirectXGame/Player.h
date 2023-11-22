@@ -70,7 +70,6 @@ public:
 	void SetLife(int32_t Life) { Life_ = Life; };
 	int32_t GetLife() { return Life_; };
 
-	Vector3  GetWorldPosition();
 
 	void SetViewProjection(const ViewProjection* viewProjection) {
 		viewProjection_ = viewProjection;
@@ -78,12 +77,7 @@ public:
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 	const WorldTransform& GetAttack() { return worldTransformAttack_; }
 	const int& GetPlayerAttackFlag() { return playerAttackFlag; }
-	const bool& GetPlayerAttackFlag() { return playerAttackFlag; }
 
-	/// <summary>
-/// 
-/// </summary>
-	~Player();
 
 private:
 	WorldTransform worldTransform_;
