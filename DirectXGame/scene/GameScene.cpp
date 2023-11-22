@@ -147,6 +147,7 @@ void GameScene::Update() {
 
 }
 
+
 void GameScene::ItemOnCollision() {
 	//プレイヤーとアイテム
 	if (areaItemCollisionFlag == 1 && player_->GetPlayerAttackFlag() == 1) {
@@ -184,6 +185,8 @@ void GameScene::ItemOnCollision() {
 	}
 	if (areaItemCollisionTime >= areaItemCollisionTimeCount) {
 		areaItemCollisionTimeFlag = 0;
+		areaItemCollisionTime = 0;
+		areaItemCollisionFlag = 1;
 	}
 	ImGui::Begin("Debug");
 	ImGui::InputInt("areaItemCollisionFlag", &areaItemCollisionFlag);
