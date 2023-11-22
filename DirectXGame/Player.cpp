@@ -77,10 +77,7 @@ void Player::Update() {
 	} else if (input_->PushKey(DIK_S)) {
 		move_.z -= kCharacterSpeed;
 		walkModelTimeFlag = 1;
-	} /*else {
-		worldTransformR_feet_.rotation_.x = 3.15f;
-		worldTransformL_feet_.rotation_.x = 3.15f;
-	}*/
+	} 
 
 	// 押した方向で移動ベクトルを変更（左右）
 	if (input_->PushKey(DIK_A)) {
@@ -98,26 +95,37 @@ void Player::Update() {
 		if (walkModelTime <= 8) {
 			worldTransformL_feet_.rotation_.x += 0.1f;
 			worldTransformR_feet_.rotation_.x -= 0.1f;
+			worldTransformL_arm_.rotation_.x -= 0.1f;
+			worldTransformR_arm_.rotation_.x += 0.1f;
 		}
 		if (walkModelTime >= 16 && walkModelTime <= 24) {
 			worldTransformL_feet_.rotation_.x -= 0.1f;
 			worldTransformR_feet_.rotation_.x += 0.1f;
+			worldTransformL_arm_.rotation_.x += 0.1f;
+			worldTransformR_arm_.rotation_.x -= 0.1f;
 		} 
 		if (walkModelTime >= 24 && walkModelTime <= 32) {
 			worldTransformL_feet_.rotation_.x -= 0.1f;
 			worldTransformR_feet_.rotation_.x += 0.1f;
+			worldTransformL_arm_.rotation_.x += 0.1f;
+			worldTransformR_arm_.rotation_.x -= 0.1f;
 		} 
 		if (walkModelTime >= 32) {
 			worldTransformL_feet_.rotation_.x += 0.1f;
 			worldTransformR_feet_.rotation_.x -= 0.1f;
+			worldTransformL_arm_.rotation_.x -= 0.1f;
+			worldTransformR_arm_.rotation_.x += 0.1f;
 		}
 		if (walkModelTime == 40) {
 			worldTransformR_feet_.rotation_.x = 0;
 			worldTransformL_feet_.rotation_.x = 0;
+			worldTransformL_arm_.rotation_.x  = 0;
+			worldTransformR_arm_.rotation_.x = 0;
 			walkModelTime = 0;
 			walkModelTimeFlag = 0;
 		}
 	} else {
+		
 		walkModelTime = 0;
 		walkModelTimeFlag = 0;
 	}
@@ -203,7 +211,7 @@ void Player::Update() {
 void Player::Attack() {
 	if (input_->PushKey(DIK_L)) {
 		playerAttackFlag = 1;
-		//worldTransformR_arm_.rotation_.x -= 0.1f;
+		worldTransformR_arm_.rotation_.x -= 0.1f;
 	} else {
 		playerAttackFlag = 0;
 	}
