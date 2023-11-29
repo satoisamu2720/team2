@@ -120,8 +120,10 @@ private: // メンバ変数
 	bool isDebugCameraActive_ = false;
 	std::unique_ptr<RailCamera> railCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
-
+	int CollisionFlag = 0;
 		int areaItemCollisionFlag = 1;
+	    int enemyAttackCollisionFlag = 0;
+	    int enemyAttackFlag = 0;
 		int areaItemCollisionTimeFlag = 0;
 	    int areaItemCollisionTime = 0;
 	    int areaItemCollisionTimeCount = 60*5;

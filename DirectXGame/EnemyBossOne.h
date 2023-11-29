@@ -13,7 +13,7 @@ class EnemyBossOne {
 	void Initialize(Model* model, const Vector3& position);
 
 
-	void Update();
+	void Update(int t);
 
 	
 	void Draw(ViewProjection view, int t);
