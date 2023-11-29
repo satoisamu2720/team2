@@ -49,12 +49,12 @@ void FollowCamera::Update() {
 	float rotation_[3] = {
 	    viewProjection_.rotation_.x, viewProjection_.rotation_.y, viewProjection_.rotation_.z
 	};
-	
+#ifdef _DEBUG
 	ImGui::Begin("offset Camera");
 	ImGui::DragFloat3("Camera Translation_", translation_, 0.01f,30.0f);
 	ImGui::DragFloat3("Camera Rotation", rotation_, 0.01f, 30.0f);
 	ImGui::End();
-
+#endif// _DEBUG
 	/*viewProjection_.translation_.x = translation_[0];
 	viewProjection_.translation_.y = translation_[1];
 	viewProjection_.translation_.z = translation_[2];*/

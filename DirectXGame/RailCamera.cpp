@@ -16,9 +16,10 @@ void RailCamera::Update() {
 	    {1.0f, 1.0f, 1.0f}, worldTransform_.rotation_, worldTransform_.translation_);
 
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
-
+#ifdef _DEBUG
 	ImGui::Begin("Rail Camera");
 	ImGui::DragFloat3("Camera Position", &worldTransform_.translation_.x, 0.01f);
 	ImGui::DragFloat3("Camera Rotation", &worldTransform_.rotation_.x, 0.01f);
 	ImGui::End();
+#endif// _DEBUG
 }

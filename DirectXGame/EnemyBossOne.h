@@ -10,13 +10,13 @@ class EnemyBossOne {
 
 	public:
 	
-	void Initialize(Model* model, const Vector3& position);
+	void Initialize(Model* model, Model* modelB, const Vector3& position);
 
 
 	void Update(int t);
 
 	
-	void Draw(ViewProjection view, int t);
+	void Draw(ViewProjection view, int t,int h);
 	
 	Vector3 GetWorldPosition();
 	/// <summary>
@@ -28,7 +28,7 @@ class EnemyBossOne {
 private:
 	WorldTransform worldTransform_;
 
-	Model* modelEnemyBossOne_;
+	Model* modelEnemyBossOne_[2];
 
 	ViewProjection viewProjection_;
 

@@ -70,7 +70,7 @@ void Player::Update() {
 	Vector3 move_ = { 0, 0, 0 };
 
 	// キャラクターの移動速度
-	const float kCharacterSpeed = 0.5f;
+	const float kCharacterSpeed = 1.0f;
 	//const float kRotSpeed = 0.05f;
 	if (input_->PushKey(DIK_W)) {
 		move_.z += kCharacterSpeed;
@@ -172,7 +172,7 @@ void Player::Update() {
 	float inputFloat3[3] = {
 	    worldTransform_.translation_.x, worldTransform_.translation_.y,
 	    worldTransform_.translation_.z};
-
+#ifdef _DEBUG
 	//デバッグ
 	ImGui::Begin("Debug");
 	//ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
@@ -183,7 +183,7 @@ void Player::Update() {
 	worldTransform_.translation_.x = inputFloat3[0];
 	worldTransform_.translation_.y = inputFloat3[1];
 	worldTransform_.translation_.z = inputFloat3[2];
-
+#endif //_DEBUG
 }
 
 void Player::Attack() {
@@ -220,7 +220,7 @@ void Player::Draw(ViewProjection view,int playerLife) {
 		modelFighterL_feet_->Draw(worldTransformL_feet_, view);
 		modelFighterR_feet_->Draw(worldTransformR_feet_, view);
 		if (playerAttackFlag == 1) {
-			modelAttack_->Draw(worldTransformAttack_, view);
+			//modelAttack_->Draw(worldTransformAttack_, view);
 		}
 	}
 };

@@ -17,7 +17,7 @@ public:
 	// 衝突を検出したら呼び出されるコールバック関数
 	//アイテム
 	void ItemOnCollisions();
-
+	Vector3 GetWorldPosition();
 	//小さい敵
 	const std::list<LotEnemy*>& GetLotEnemys() const { return enemyNums_; }
 
@@ -30,6 +30,9 @@ public:
 	Input* input_ = nullptr;
 	// ワールド変換データ
 	 WorldTransform worldTransform_;
+	 //
+	WorldTransform worldTransformBoss_;
+
 	// 体ワールド変換データ
 	 WorldTransform worldTransformBody_;
 	    // 腕ワールド変換データ

@@ -19,6 +19,7 @@
 #include <memory>
 #include <Boss.h>
 #include<LotEnemy.h>
+#include "EnemyLife.h"
 #include<list>
 
     /// <summary>
@@ -66,8 +67,11 @@ public: // メンバ関数
 	void GameClearUpdate();
 
 	void Reset();
-	//void TitleDraw2DNear();
-	//void GameOverDraw2DNear(); // ゲームオーバー
+	void playerLife2DNear();
+	void TitleDraw2DNear();
+	void GameOverDraw2DNear();
+	void GameClearDraw2DNear();
+
 private: // メンバ変数
 	// テクスチャハンドル
 
@@ -78,6 +82,22 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0;
 	Sprite* sprite_ = nullptr;
 
+	uint32_t titleTextureHandle_ = 0;
+	Sprite* titleSprite_ = nullptr;
+
+	uint32_t gameClearTextureHandle_ = 0;
+	Sprite* gameClearSprite_ = nullptr;
+
+	uint32_t gameOverTextureHandle_ = 0;
+	Sprite* gameOverSprite_ = nullptr;
+
+	uint32_t playerLifeTextureHandle_[5] = {0};
+	Sprite* playerLifeSprite_[5] = {nullptr};
+
+	uint32_t enemyLifeTextureHandle_ = 0;
+	Sprite* enemyLifeSprite_ = nullptr;
+
+	
 	std::unique_ptr<Model> modelFighterBody_;
 	std::unique_ptr<Model> modelFighterHead_;
 	std::unique_ptr<Model> modelFighterL_arm_;
@@ -90,8 +110,12 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterL_feet_;
 	std::unique_ptr<Model> modelFighterR_feet_;
 	std::unique_ptr<Model> modelAreaItem_;
-	std::unique_ptr<Model> modelEnemyBossOne_;
+	std::unique_ptr<Model> modelEnemyBoss_;
+	std::unique_ptr<Model> modelEnemyBossOne_[2];
 	std::unique_ptr<Model> modelPlayerAttack_;
+
+	std::unique_ptr<Model> modelenemyLife_;
+	
 
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
@@ -108,7 +132,7 @@ private: // メンバ変数
 	std::unique_ptr<Skydome>skydome_;
 	std::unique_ptr<AreaItem> areaItem_;
 	std::unique_ptr<EnemyBossOne> enemyBossOne_;
-	
+	std::unique_ptr<EnemyLife> enemyLife_;
 
 	Model* modelSkydome_ = nullptr;
 	std::unique_ptr<Ground> ground_;
@@ -130,9 +154,11 @@ private: // メンバ変数
 	std::unique_ptr<RailCamera> railCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
 	    int CollisionFlag = 0;
+	    int lotCollisionFlag = 1;
 		int areaItemCollisionFlag = 1;
 	    int enemyAttackCollisionFlag = 0;
 	    int enemyAttackFlag = 0;
+	    int enemyAttackHitFlag = 0;
 		int areaItemCollisionTimeFlag = 0;
 	    int areaItemCollisionTime = 0;
 	    int areaItemCollisionTimeCount = 60*5;
@@ -142,8 +168,8 @@ private: // メンバ変数
 		// シーン切り替え
 	    int sceneMode_ = 1;
 		
-		int playerLife_ = 6;
-	    int bossLife_ = 20;
+		int playerLife_ = 5;
+	    int bossLife_ = 10;
 	    int flag;
 	/// <summary>
 	/// ゲームシーン用

@@ -15,7 +15,32 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	audio_ = Audio::GetInstance();
 	input_ = Input::GetInstance();
-	textureHandle_ = TextureManager::Load("genshin.png");
+	textureHandle_ = TextureManager::Load("Elife.png");
+
+	playerLifeTextureHandle_[0] = TextureManager::Load("Plife/Plife1.png");
+	playerLifeTextureHandle_[1] = TextureManager::Load("Plife/Plife2.png");
+	playerLifeTextureHandle_[2] = TextureManager::Load("Plife/Plife3.png");
+	playerLifeTextureHandle_[3] = TextureManager::Load("Plife/Plife4.png");
+	playerLifeTextureHandle_[4] = TextureManager::Load("Plife/Plife5.png");
+
+	/*for (int i = 0; i < 4; i++) {
+		playerLifeSprite_[i] = Sprite::Create(playerLifeTextureHandle_[i], {0, 0});
+	}*/
+
+	playerLifeSprite_[0] = Sprite::Create(playerLifeTextureHandle_[0], {0, 0});
+	playerLifeSprite_[1] = Sprite::Create(playerLifeTextureHandle_[1], {0, 0});
+	playerLifeSprite_[2] = Sprite::Create(playerLifeTextureHandle_[2], {0, 0});
+	playerLifeSprite_[3] = Sprite::Create(playerLifeTextureHandle_[3], {0, 0});
+	playerLifeSprite_[4] = Sprite::Create(playerLifeTextureHandle_[4], {0, 0});
+
+
+	titleTextureHandle_ = TextureManager::Load("Title2.png");
+	gameOverTextureHandle_ = TextureManager::Load("gameover.png");
+	gameClearTextureHandle_ = TextureManager::Load("clear.png");
+
+	titleSprite_ = Sprite::Create(titleTextureHandle_, {0, 0});
+	gameOverSprite_ = Sprite::Create(gameOverTextureHandle_, {0, 0});
+	gameClearSprite_ = Sprite::Create(gameClearTextureHandle_, {0, 0});
 
 	modelFighterBody_.reset(Model::CreateFromOBJ("body", true));
 	modelFighterHead_.reset(Model::CreateFromOBJ("head", true));
@@ -24,10 +49,11 @@ void GameScene::Initialize() {
 	modelFighterL_feet_.reset(Model::CreateFromOBJ("feet_left", true));
 	modelFighterR_feet_.reset(Model::CreateFromOBJ("feet_right", true));
 	modelAreaItem_.reset(Model::CreateFromOBJ("body", true));
-	modelEnemyBossOne_.reset(Model::CreateFromOBJ("BossAttackArm", true));
+	modelEnemyBoss_.reset(Model::CreateFromOBJ("BOSS", true));
+	modelEnemyBossOne_[0].reset(Model::CreateFromOBJ("BossAttackArm", true));
+	modelEnemyBossOne_[1].reset(Model::CreateFromOBJ("BossAttackArm", true));
 	modelPlayerAttack_.reset(Model::CreateFromOBJ("head", true));
-	
-
+	modelenemyLife_.reset(Model::Create());
 	modelBossBody_.reset(Model::CreateFromOBJ("Boss_body", true));
 	modelBossArm_.reset(Model::CreateFromOBJ("Boss_arm", true));
 
@@ -58,7 +84,11 @@ void GameScene::Initialize() {
 
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize(
-	    modelEnemyBossOne_.get(), modelBossArm_.get(),  modelBossBody_.get(), modelLotEnemy_.get());
+	    modelAreaItem_.get(), modelBossArm_.get(), modelBossBody_.get(),
+	    modelLotEnemy_.get());
+	enemyLife_ = std::make_unique<EnemyLife>();
+	enemyLife_->Initialize(modelenemyLife_.get(), textureHandle_);
+
 
 		/*lotenemy_ = std::make_unique<Boss>();
 		lotenemy_->Initialize(modelLotEnemy_.get());*/
@@ -77,17 +107,22 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	areaItem_ = std::make_unique<AreaItem>();
-	areaItem_->Initialize(modelAreaItem_.get(), {0.0f, 0.0f, -30.0f});
+	areaItem_->Initialize(modelAreaItem_.get(), {0.0f, 0.0f, 0.0f});
 
 	enemyBossOne_ = std::make_unique<EnemyBossOne>();
-	enemyBossOne_->Initialize( modelEnemyBossOne_.get(), {
+	enemyBossOne_->Initialize(
+	    modelEnemyBossOne_[0].get(), modelEnemyBossOne_[1].get(),
+	    {
 		areaItem_->GetItemWorldTransform().translation_.x,
-		30.0f,
+		50.0f,
 		areaItem_->GetItemWorldTransform().translation_.z
 		}
 	);
+	
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
+	
+
 
 	debugCamera_ = std::make_unique<DebugCamera>(1280,720);
 	//軸方向表示の表示を有効にする
@@ -103,15 +138,15 @@ void GameScene::Initialize() {
 	ItemSound_ = audio_->LoadWave("sound/item.wav");
 	SystemSound_ = audio_->LoadWave("sound/system.wav");
 
-	audio_->PlayWave(soundDataHandle_,true);
+	audio_->PlayWave(soundDataHandle_,true,0.2f);
 	//音は適当に用意したものなので気に入らなければ変更
 	// 一応ファイルには他にボスの腕が落ちる音と自機の攻撃の音が入ってる
 	//敵からのダメージ音各場所に置く
 	// ボスと小さいの
 	//audio_->PlayWave(LotDanageSound_);
-	//audio_->PlayWave(BossDamageSound_);
+	audio_->PlayWave(BossDamageSound_);
 	//シーン切り替えとかのキーを押したときの音
-	//audio_->PlayWave(SystemSound_);
+	audio_->PlayWave(SystemSound_);
 }
 
 void GameScene::Update() {
@@ -137,7 +172,7 @@ void GameScene::Update() {
 void GameScene::GamePlayUpdate() {
 	player_->Update();
 	boss_->Update();
-
+	enemyLife_->Update();
 	skydome_->Update();
 	ground_->Update();
 	areaItem_->Update();
@@ -190,12 +225,14 @@ void GameScene::TitleUpdate() {
 if (input_->TriggerKey(DIK_SPACE)) {
 		// リセット
 		sceneMode_ = 0;
+		audio_->PlayWave(SystemSound_);
 	}
 }
 
 void GameScene::GameOverUpdate() {
 	if (input_->TriggerKey(DIK_SPACE)) {
 		Initialize();
+		audio_->PlayWave(SystemSound_);
 		sceneMode_ = 1;
 		Reset();
 	}
@@ -205,6 +242,7 @@ void GameScene::GameOverUpdate() {
 void GameScene::GameClearUpdate() {
 	if (input_->TriggerKey(DIK_SPACE)) {
 		Initialize();
+		audio_->PlayWave(SystemSound_);
 		sceneMode_ = 1;
 		Reset();
 	}
@@ -250,6 +288,8 @@ void GameScene::ItemOnCollision() {
 			areaItemCollisionTimeFlag = 1;
 			bossLife_ -=1;
 			boss_->ItemOnCollisions();
+			enemyAttackHitFlag = 1;
+			audio_->PlayWave(BossDamageSound_);
 		}
 		
 	}
@@ -271,7 +311,21 @@ void GameScene::ItemOnCollision() {
 			audio_->PlayWave(ItemSound_);
 		}
 	}
+	//if (lotCollisionFlag == 1) {
+	//	float dx = abs(player_->GetWorldPosition().x - boss_->GetWorldPosition().x);
+	//	float dz = abs(player_->GetWorldPosition().z - boss_->GetWorldPosition().z);
+	//	// 衝突したら
+	//	float dist = dx * dx + dz * dz;
+	//	dist = sqrtf(dist);
+	//	if (dist <= 10) {
+	//		// 衝突したら
 
+	//		areaItemCollisionTimeFlag = 1;
+	//		lotCollisionFlag = 0;
+	//		playerLife_ -= 1;
+	//		boss_->ItemOnCollisions();
+	//	}
+	//}
      if (areaItemCollisionTimeFlag == 1) {
 		areaItemCollisionTime++;
 	 }
@@ -285,31 +339,18 @@ void GameScene::ItemOnCollision() {
 		enemyAttackFlag = 0;
 		areaItemCollisionFlag = 1;
 		enemyAttackCollisionFlag = 0;
+		enemyAttackHitFlag=0;
+		lotCollisionFlag = 1;
 	}
-	//
-	// if (areaItemCollisionFlag == 1) {
-	//	// 差を求める
-	//	float dx =
-	//	    abs(player_->GetAttackWorldPosition().x -
-	//	        areaItem_->GetItemWorldTransform().translation_.x);
-	//	float dz =
-	//	    abs(player_->GetAttackWorldPosition().z -
-	//	        areaItem_->GetItemWorldTransform().translation_.z);
-	//	// 衝突したら
-	//	if (dx < 5 && dz < 5) {
-	//		areaItemCollisionTimeFlag = 1;
-	//		areaItemCollisionFlag = 0;
-	//		// boss_->GetLife()-1;
-	//		boss_->ItemOnCollisions();
-	//	}
-	//}
+	
+	
 
 #ifdef _DEBUG
 	
 	ImGui::Begin("Debug");
 	ImGui::InputInt("playerLIfe", &playerLife_);
 	ImGui::InputInt("bossLife_", &bossLife_);
-	ImGui::InputInt("enemyAttackFlag", &enemyAttackFlag);
+	ImGui::InputInt("lotCollisionFlag", &lotCollisionFlag);
 	ImGui::InputInt("enemyAttackCollisionFlag", &enemyAttackCollisionFlag);
 	ImGui::InputInt("areaItemCollisionTimeFlag", &areaItemCollisionTimeFlag);
 	ImGui::InputInt("areaItemCollisionTimeCount", &areaItemCollisionTimeCount);
@@ -319,6 +360,29 @@ void GameScene::ItemOnCollision() {
 
 #endif // _DEBUG
 }
+void GameScene::playerLife2DNear() {
+	if (playerLife_ == 5) {
+		playerLifeSprite_[4]->Draw();
+	}
+	if (playerLife_ == 4) {
+		playerLifeSprite_[3]->Draw();
+	}
+	if (playerLife_ == 3) {
+		playerLifeSprite_[2]->Draw();
+	}
+	if (playerLife_ == 2) {
+		playerLifeSprite_[1]->Draw();
+	}
+	if (playerLife_ == 1) {
+		playerLifeSprite_[0]->Draw();
+	}
+}
+
+void GameScene::TitleDraw2DNear() { titleSprite_->Draw(); }
+
+void GameScene::GameOverDraw2DNear() { gameOverSprite_->Draw(); }
+
+void GameScene::GameClearDraw2DNear() { gameClearSprite_->Draw(); }
 
 
 	void GameScene::Draw() {
@@ -351,24 +415,33 @@ void GameScene::ItemOnCollision() {
 	// 3Dオブジェクト描画後処理
 	player_->Draw(viewProjection_,playerLife_);
 	boss_->Draw(viewProjection_);
-
 	skydome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 	areaItem_->Draw(viewProjection_, areaItemCollisionFlag);
-	enemyBossOne_->Draw(viewProjection_, enemyAttackFlag);
-
+	enemyBossOne_->Draw(viewProjection_, enemyAttackFlag, enemyAttackHitFlag);
+	enemyLife_->Draw(viewProjection_,bossLife_);
 	Model::PostDraw();
 
 
 
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
-	/*if (sceneMode_ == 1) {
+	if (sceneMode_ == 0) {
+		playerLife2DNear();
+		
+	}
+	if (sceneMode_ == 1) {
 		TitleDraw2DNear();
+		
 	}
 	if (sceneMode_ == 2) {
 		GameOverDraw2DNear();
-	}*/
+		
+	}
+	if (sceneMode_ == 3) {
+		GameClearDraw2DNear();
+		
+	}
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 
@@ -390,6 +463,11 @@ void GameScene::ItemOnCollision() {
 	areaItemCollisionTimeCount = 60 * 5;
 	// シーン切り替え
 	sceneMode_ = 1;
-	playerLife_ = 6;
-	bossLife_ = 20;
-}
+	playerLife_ = 5;
+	bossLife_ = 10;
+    }
+
+   
+
+    
+   

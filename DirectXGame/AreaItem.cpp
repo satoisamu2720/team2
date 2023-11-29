@@ -38,7 +38,7 @@ void AreaItem::Random() {
 	srand((unsigned int)currentTime);
 	
 
-	worldTransform_.translation_.x = (float)(rand() % 1600 - 800); // ランダムな数字今1-6
-	    worldTransform_.translation_.y = 0;
-	worldTransform_.translation_.z = (float)(rand() % 1600-800); // ランダム
+	//worldTransform_.translation_.x = (float)(rand() %  100-50 ); // ランダムな数字今1-6
+	//    worldTransform_.translation_.y = 0;
+	//worldTransform_.translation_.z = (float)(rand() % 100 - 50); // ランダム
 }

@@ -115,6 +115,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBossOne.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="EnemyLife.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="LotEnemy.cpp" />
     <ClCompile Include="main.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBossOne.h" />
     <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="EnemyLife.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="LotEnemy.h" />

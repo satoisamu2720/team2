@@ -18,18 +18,19 @@ void Boss::Initialize(Model* model, Model* modelA,Model * modelB, Model* modelE)
 
 	 RotateSpeed = 0.01f;
 	TimingTimer = 60;
-	 worldTransform_.translation_ = {0.0f, 1.0f, 30.0f};
+	 worldTransform_.translation_ = {0.0f, 1.0f, 120.0f};
 	worldTransform_.scale_ = {8.0f, 8.0f, 8.0f};
+	
 	worldTransformArm_.translation_ = {0.0f, 8.0f, 0.0f};
 	 worldTransformBody_.translation_ = {0.0f, 8.0f, 0.0f};
-	worldTransformLot_.parent_ = &worldTransform_;
+	//worldTransformLot_.parent_ = &worldTransform_;
 	worldTransformArm_.parent_ = &worldTransform_;
 	 worldTransformBody_.parent_ = &worldTransform_;
 
 	// ライフ
-	Life_ = 20;
+	Life_ = 10;
 
-	RespawnTime = 600;
+	RespawnTime = 300;
 
 	phase_ = Phase::Attack;
 
@@ -69,11 +70,11 @@ void Boss::Update() {
 			return false;
 		});
 		
-		//10秒経ったらまた攻撃し始める
+		//5秒経ったらまた攻撃し始める
 		RespawnTime -= 1;
 		if (RespawnTime <= 0) {
 			phase_ = Phase::Attack;
-			RespawnTime = 600;
+			RespawnTime = 300;
 		}
 			break;
 	}
@@ -84,7 +85,7 @@ void Boss::Draw(const ViewProjection& viewProjection_) {
 	// 3Dモデルを描画
 	modelA_->Draw(worldTransformArm_, viewProjection_);
 	modelB_->Draw(worldTransformBody_, viewProjection_);
-	//model_->Draw(worldTransform_, viewProjection_);
+	model_->Draw(worldTransformLot_, viewProjection_);
 
 	// 小さい敵の描画複数
 	for (LotEnemy* enemynum : enemyNums_) {
@@ -117,4 +118,13 @@ void Boss::ItemOnCollisions() {
 	}
 	phase_ = Phase::noAttack;
 }
+Vector3 Boss::GetWorldPosition() {
 
+	Vector3 worldPos;
+
+	worldPos.x = worldTransformLot_.matWorld_.m[3][0];
+	worldPos.y = worldTransformLot_.matWorld_.m[3][1];
+	worldPos.z = worldTransformLot_.matWorld_.m[3][2];
+
+	return worldPos;
+}
