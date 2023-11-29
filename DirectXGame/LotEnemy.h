@@ -11,7 +11,9 @@ public:
 	void Draw(const ViewProjection& viewProjection_);
 	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
-
+	//死んだ後の動き
+	void DieMotion();
+	
 		const WorldTransform& GetWorldTransform() { return worldTransform_; }
 	bool IsDead() const { return isDead_; }
 
@@ -30,6 +32,5 @@ private:
 	int32_t deathTimer_ = kLifeTime;
 	//デスフラグ
 	bool isDead_ = false;
-	
 	
 };

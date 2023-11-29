@@ -15,7 +15,11 @@ void LotEnemy::Initialize(Model* model,const Vector3&position,const Vector3& vel
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
 
+	deathTimer_ = 6000;
+
 	isDead_ = false;
+
+
 }
 
 void LotEnemy::Update() {
@@ -31,9 +35,10 @@ void LotEnemy::Update() {
 	//時間経過でデス
 	if (--deathTimer_ <= 0) {
 		isDead_ = true;
+		deathTimer_ = 6000;
 	}
 
-	
+
 }
 
 void LotEnemy::Draw(const ViewProjection& viewProjection_) {
@@ -42,6 +47,19 @@ void LotEnemy::Draw(const ViewProjection& viewProjection_) {
 	
 }
 
-void LotEnemy::OnCollision() { isDead_ = true; }
+void LotEnemy::OnCollision() {
+		isDead_ = true;
+}
+
+void LotEnemy::DieMotion() {
+	//移動させる
+	   velocity_.x *=1000;
+	    velocity_.z *=1000;
+	     worldTransform_.translation_.x += velocity_.x;
+	    worldTransform_.translation_.z += velocity_.z;
+		
+	    // ワールドトランスフォームの更新　場所動かすときに使える
+	    worldTransform_.UpdateMatrix();
+}
 
 
