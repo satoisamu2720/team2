@@ -15,7 +15,7 @@ void EnemyBossOne::Update(int t) {
 	if (t == 1 ) {
 
 		Vector3 move = {0, 0, 0};
-		move.y -= 0.2f;
+		move.y -= 0.5f;
 		// 行列更新
 		worldTransform_.UpdateMatrix();
 		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
@@ -23,6 +23,8 @@ void EnemyBossOne::Update(int t) {
 		if (worldTransform_.translation_.y <= 0.0f) {
 			worldTransform_.translation_.y = 0.0f;
 		}
+	} else {
+		worldTransform_.translation_.y = 30.0f;
 	}
 
 	float trans[3]{
@@ -30,7 +32,7 @@ void EnemyBossOne::Update(int t) {
 	    worldTransform_.translation_.z};
 
 	ImGui::Begin("Debug");
-	ImGui::SliderFloat3("worldTransform_", trans,1,1);
+	ImGui::SliderFloat3("worldTransform_", trans,1,30);
 	ImGui::End();
 
 	worldTransform_.translation_.x = trans[0];

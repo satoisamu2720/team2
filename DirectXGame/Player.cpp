@@ -96,31 +96,46 @@ void Player::Update() {
 		if (walkModelTime <= 8) {
 			worldTransformL_feet_.rotation_.x += 0.1f;
 			worldTransformR_feet_.rotation_.x -= 0.1f;
-			worldTransformL_arm_.rotation_.x -= 0.1f;
-			worldTransformR_arm_.rotation_.x += 0.1f;
 		}
 		if (walkModelTime >= 16 && walkModelTime <= 24) {
 			worldTransformL_feet_.rotation_.x -= 0.1f;
 			worldTransformR_feet_.rotation_.x += 0.1f;
-			worldTransformL_arm_.rotation_.x += 0.1f;
-			worldTransformR_arm_.rotation_.x -= 0.1f;
+			
 		} 
 		if (walkModelTime >= 24 && walkModelTime <= 32) {
 			worldTransformL_feet_.rotation_.x -= 0.1f;
 			worldTransformR_feet_.rotation_.x += 0.1f;
-			worldTransformL_arm_.rotation_.x += 0.1f;
-			worldTransformR_arm_.rotation_.x -= 0.1f;
+		
 		} 
 		if (walkModelTime >= 32) {
 			worldTransformL_feet_.rotation_.x += 0.1f;
 			worldTransformR_feet_.rotation_.x -= 0.1f;
-			worldTransformL_arm_.rotation_.x -= 0.1f;
-			worldTransformR_arm_.rotation_.x += 0.1f;
+			
 		}
 		if (walkModelTime == 40) {
 			worldTransformR_feet_.rotation_.x = 0;
 			worldTransformL_feet_.rotation_.x = 0;
-			worldTransformL_arm_.rotation_.x  = 0;
+			walkModelTime = 0;
+			walkModelTimeFlag = 0;
+		}
+		if (walkModelTime <= 8 && playerAttackTimeFlag ==0) {
+			worldTransformL_arm_.rotation_.x -= 0.1f;
+			worldTransformR_arm_.rotation_.x += 0.1f;
+		}
+		if (walkModelTime >= 16 && walkModelTime <= 24 && playerAttackTimeFlag == 0) {
+			worldTransformL_arm_.rotation_.x += 0.1f;
+			worldTransformR_arm_.rotation_.x -= 0.1f;
+		}
+		if (walkModelTime >= 24 && walkModelTime <= 32 && playerAttackTimeFlag == 0) {
+			worldTransformL_arm_.rotation_.x += 0.1f;
+			worldTransformR_arm_.rotation_.x -= 0.1f;
+		}
+		if (walkModelTime >= 32 && playerAttackTimeFlag == 0) {
+			worldTransformL_arm_.rotation_.x -= 0.1f;
+			worldTransformR_arm_.rotation_.x += 0.1f;
+		}
+		if (walkModelTime == 40 && playerAttackTimeFlag == 0) {
+			worldTransformL_arm_.rotation_.x = 0;
 			worldTransformR_arm_.rotation_.x = 0;
 			walkModelTime = 0;
 			walkModelTimeFlag = 0;
@@ -170,13 +185,27 @@ void Player::Update() {
 }
 
 void Player::Attack() {
-	if (input_->PushKey(DIK_SPACE)) {
+	if (input_->PushKey(DIK_SPACE) && playerAttackTimeFlag == 0) {
 		playerAttackFlag = 1;
+		playerAttackTimeFlag = 1;
 		//worldTransformR_arm_.rotation_.x -= 0.1f;
 	} else {
 		playerAttackFlag = 0;
 	}
-
+	if (playerAttackTimeFlag == 1) {
+		playerAttackTime++;
+	}
+	if (playerAttackTime >= 40) {
+		worldTransformR_arm_.rotation_.x = 0;
+		playerAttackTime = 0;
+		playerAttackTimeFlag = 0;
+	}
+	if (playerAttackTime >= 1 && playerAttackTime <= 20) {
+		worldTransformR_arm_.rotation_.x -= 0.1f;
+	}
+	if (playerAttackTime <= 40 && playerAttackTime >= 20) {
+		worldTransformR_arm_.rotation_.x += 0.1f;
+	}
 }
 
 void Player::Draw(ViewProjection view,int playerLife) { 

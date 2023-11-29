@@ -63,6 +63,9 @@ public: // メンバ関数
 	void GamePlayUpdate();
 	void TitleUpdate();
 	void GameOverUpdate();
+	void GameClearUpdate();
+
+	void Reset();
 
 private: // メンバ変数
 	// テクスチャハンドル
@@ -120,7 +123,7 @@ private: // メンバ変数
 	bool isDebugCameraActive_ = false;
 	std::unique_ptr<RailCamera> railCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
-	int CollisionFlag = 0;
+	    int CollisionFlag = 0;
 		int areaItemCollisionFlag = 1;
 	    int enemyAttackCollisionFlag = 0;
 	    int enemyAttackFlag = 0;
@@ -128,6 +131,8 @@ private: // メンバ変数
 	    int areaItemCollisionTime = 0;
 	    int areaItemCollisionTimeCount = 60*5;
 
+
+		
 		// シーン切り替え
 	    int sceneMode_ = 1;
 		

@@ -113,6 +113,9 @@ private:
 	int walkModelTime = 0;
 	int walkModelTimeFlag = 0;
 
+	int playerAttackTimeFlag = 0;
+	int playerAttackTime = 0;
+
 	// ライフ
 	int32_t Life_ = 6;
 };
