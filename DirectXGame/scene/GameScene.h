@@ -117,7 +117,12 @@ private: // メンバ変数
 
 	Vector3 velocity_;
 
-
+	//サウンド
+	uint32_t BGMSound_=0;
+	uint32_t LotDanageSound_ = 0;
+	uint32_t BossDamageSound_ = 0;
+	uint32_t ItemSound_ = 0;
+	uint32_t SystemSound_ = 0;
 	
 	//const WorldTransform& GetWorldTransform() { return matProjection; }
 
