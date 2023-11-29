@@ -212,14 +212,13 @@ void GameScene::ItemOnCollision() {
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
 			enemyAttackFlag = 1;
-			enemyAttackCollisionFlag = 1;
 			boss_->ItemOnCollisions();
 		}
 	}
 
 
 	//プレイヤー攻撃と敵の腕判定
-	if (player_->GetPlayerAttackFlag() == 1 ) {
+	if (player_->GetPlayerAttackFlag() == 1 && enemyAttackFlag == 1) {
 		
 		// 差を求める
 		float dx = abs(player_->GetAttackWorldPosition().x - enemyBossOne_->GetWorldPosition().x);
@@ -228,7 +227,7 @@ void GameScene::ItemOnCollision() {
 		// 衝突したら
 		float dist = dx * dx + dy * dy + dz * dz;
 		dist = sqrtf(dist);
-		if (dist <= 5) {
+		if (dist <= 10) {
 			areaItemCollisionTimeFlag = 1;
 			bossLife_ -=1;
 			boss_->ItemOnCollisions();
@@ -254,12 +253,16 @@ void GameScene::ItemOnCollision() {
      if (areaItemCollisionTimeFlag == 1) {
 		areaItemCollisionTime++;
 	 }
+	 if (areaItemCollisionTime == 60) {
+		enemyAttackCollisionFlag = 1;
+	 }
+
 	if (areaItemCollisionTime >= areaItemCollisionTimeCount) {
 		areaItemCollisionTimeFlag = 0;
 		areaItemCollisionTime = 0;
 		enemyAttackFlag = 0;
 		areaItemCollisionFlag = 1;
-		enemyAttackCollisionFlag = 1;
+		enemyAttackCollisionFlag = 0;
 	}
 	//
 	// if (areaItemCollisionFlag == 1) {

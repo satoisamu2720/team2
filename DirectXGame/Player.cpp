@@ -115,6 +115,8 @@ void Player::Update() {
 		if (walkModelTime == 40) {
 			worldTransformR_feet_.rotation_.x = 0;
 			worldTransformL_feet_.rotation_.x = 0;
+			worldTransformL_arm_.rotation_.x = 0;
+			worldTransformR_arm_.rotation_.x = 0;
 			walkModelTime = 0;
 			walkModelTimeFlag = 0;
 		}
