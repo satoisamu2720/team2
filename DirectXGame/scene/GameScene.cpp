@@ -99,38 +99,48 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	player_->Update(); 
-	boss_->Update();
+	switch (sceneMode_) {
+	case 0:
+		GamePlayUpdate();
+		break;
+	case 1:
+		TitleUpdate();
+		break;
+	case 2:
+		GameOverUpdate();
+		break;
+	}
+}
 
+void GameScene::GamePlayUpdate() {
+	player_->Update();
+	boss_->Update();
 
 	skydome_->Update();
 	ground_->Update();
 	areaItem_->Update();
-	
-	debugCamera_->Update();
-	//デバックカメラのifdef
 
-	#ifdef _DEBUG
+	debugCamera_->Update();
+	// デバックカメラのifdef
+
+#ifdef _DEBUG
 	if (input_->TriggerKey(DIK_0) && isDebugCameraActive_ == false) {
 		isDebugCameraActive_ = true;
 	} else if (input_->TriggerKey(DIK_0) && isDebugCameraActive_ == true) {
 		isDebugCameraActive_ = false;
-		
 	}
-    #endif
-	
+#endif
 
-	
-	//カメラ処理
+	// カメラ処理
 	if (isDebugCameraActive_ == true) {
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		//ビュープロジェクション行列の転送
+		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
 		followCamera_->Update();
-		//railCamera_->Update();
+		// railCamera_->Update();
 
 		viewProjection_.matView = followCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
@@ -138,62 +148,103 @@ void GameScene::Update() {
 		/*viewProjection_.matView = railCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;*/
 		viewProjection_.TransferMatrix();
-
-		
-
 	}
 
-
 	ItemOnCollision();
+}
+
+void GameScene::TitleUpdate() {
+
+if (input_->TriggerKey(DIK_SPACE)) {
+		// リセット
+		sceneMode_ = 0;
+	}
+}
+
+void GameScene::GameOverUpdate() {
+	if (input_->TriggerKey(DIK_SPACE)) {
+		Initialize();
+		sceneMode_ = 1;
+	}
+
 
 }
 
-
 void GameScene::ItemOnCollision() {
-	//プレイヤーとアイテム
-	if (areaItemCollisionFlag == 1 && player_->GetPlayerAttackFlag() == 1) {
-		// 差を求める
-		float dx =
-		    abs(player_->GetAttackWorldPosition().x -
-		        areaItem_->GetItemWorldTransform().translation_.x);
-		float dz =
-		    abs(player_->GetAttackWorldPosition().z -
-		        areaItem_->GetItemWorldTransform().translation_.z);
-		// 衝突したら
-		if (dx < 2 && dz < 2) {
-			areaItemCollisionTimeFlag = 1;
-			areaItemCollisionFlag = 0;
-			boss_->ItemOnCollisions();
-		}
-	}
+
+
+	// アイテムとプレイヤーの判定
 	if (areaItemCollisionFlag == 1) {
 		// 差を求める
 		float dx =
-		    abs(player_->GetWorldTransform().translation_.x -
-		        boss_->GetWorldTransform().translation_.x);
+		    abs(player_->GetWorldPosition().x - areaItem_->GetItemWorldTransform().translation_.x);
 		float dz =
-		    abs(player_->GetWorldTransform().translation_.z -
-		        boss_->GetWorldTransform().translation_.z);
+		    abs(player_->GetWorldPosition().z - areaItem_->GetItemWorldTransform().translation_.z);
 		// 衝突したら
-		if (dx < 5 && dz < 5) {
+		if (dx < 1 && dz < 1) {
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
 			boss_->ItemOnCollisions();
 		}
 	}
+
+
+	//プレイヤー攻撃と敵の腕判定
+	if ( player_->GetPlayerAttackFlag() == 1) {
+
+		// 差を求める
+		float dx = abs(player_->GetAttackWorldPosition().x - enemyBossOne_->GetWorldPosition().x);
+		float dz = abs(player_->GetAttackWorldPosition().z - enemyBossOne_->GetWorldPosition().z);
+		float dy = abs(player_->GetAttackWorldPosition().y - enemyBossOne_->GetWorldPosition().y);
+		// 衝突したら
+		if (dx < 2 && dz < 2 && dy < 1) {
+			areaItemCollisionTimeFlag = 1;
+			bossLife_ --;
+			boss_->ItemOnCollisions();
+		}
+		
+	}
+
+	//
+	//if (areaItemCollisionFlag == 1) {
+	//	// 差を求める
+	//	float dx =
+	//	    abs(player_->GetAttackWorldPosition().x -
+	//	        areaItem_->GetItemWorldTransform().translation_.x);
+	//	float dz =
+	//	    abs(player_->GetAttackWorldPosition().z -
+	//	        areaItem_->GetItemWorldTransform().translation_.z);
+	//	// 衝突したら
+	//	if (dx < 5 && dz < 5) {
+	//		areaItemCollisionTimeFlag = 1;
+	//		areaItemCollisionFlag = 0;
+	//		// boss_->GetLife()-1;
+	//		boss_->ItemOnCollisions();
+	//	}
+	//}
+
+	//敵の腕とプレイヤーの判定
 	if (areaItemCollisionFlag == 1) {
 		// 差を求める
-		float dx = abs(
-		    player_->GetWorldTransform().translation_.x - areaItem_->GetItemWorldTransform().translation_.x);
+		float dx = abs(player_->GetWorldPosition().x - enemyBossOne_->GetItemWorldTransform().translation_.x);
 		float dz =
-		    abs(player_->GetWorldTransform().translation_.z - areaItem_->GetItemWorldTransform().translation_.z);
+		    abs(player_->GetWorldPosition().z - 
+				enemyBossOne_->GetItemWorldTransform().translation_.z);
+		float dy = abs(
+		    player_->GetWorldPosition().y - enemyBossOne_->GetItemWorldTransform().translation_.y);
 		// 衝突したら
-		if (dx < 2 && dz < 1) {
+		if (dx < 5 && dz < 5&& dy < 10) {
+			playerLife_ -= 1;
+			flag = 1;
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
 			boss_->ItemOnCollisions();
+		} else {
+			flag = 0;
 		}
 	}
+
+	
 	if (areaItemCollisionTimeFlag == 1) {
 		enemyBossOne_->Update();
 		areaItemCollisionTime++;
@@ -204,11 +255,14 @@ void GameScene::ItemOnCollision() {
 		areaItemCollisionFlag = 1;
 	}
 	ImGui::Begin("Debug");
+	ImGui::InputInt("playerLIfe", &playerLife_);
+	ImGui::InputInt("BossLIfe", &bossLife_);
 	ImGui::InputInt("areaItemCollisionFlag", &areaItemCollisionFlag);
 	ImGui::InputInt("areaItemCollisionTimeFlag", &areaItemCollisionTimeFlag);
 	ImGui::InputInt("areaItemCollisionTimeCount", &areaItemCollisionTimeCount);
 	ImGui::End();
 }
+
 
 	void GameScene::Draw() {
 
@@ -238,7 +292,7 @@ void GameScene::ItemOnCollision() {
 	/// </summary>
 
 	// 3Dオブジェクト描画後処理
-	player_->Draw(viewProjection_);
+	player_->Draw(viewProjection_,playerLife_);
 	boss_->Draw(viewProjection_);
 
 	skydome_->Draw(viewProjection_);

@@ -60,6 +60,10 @@ public: // メンバ関数
 	/// </summary>
 	void ItemOnCollision();
 
+	void GamePlayUpdate();
+	void TitleUpdate();
+	void GameOverUpdate();
+
 private: // メンバ変数
 	// テクスチャハンドル
 
@@ -121,6 +125,13 @@ private: // メンバ変数
 		int areaItemCollisionTimeFlag = 0;
 	    int areaItemCollisionTime = 0;
 	    int areaItemCollisionTimeCount = 60*5;
+
+		// シーン切り替え
+	    int sceneMode_ = 1;
+		
+		int playerLife_ = 6;
+	    int bossLife_ = 20;
+	    int flag;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

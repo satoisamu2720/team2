@@ -18,12 +18,12 @@ class EnemyBossOne {
 	
 	void Draw(ViewProjection view, int t);
 	
-
+	Vector3 GetWorldPosition();
 	/// <summary>
 	///
 	/// </summary>
 
-	//const WorldTransform& GetItemWorldTransform() { return worldTransform_; }
+	const WorldTransform& GetItemWorldTransform() { return worldTransform_; }
 
 private:
 	WorldTransform worldTransform_;

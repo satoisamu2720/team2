@@ -55,7 +55,7 @@ public:
 	/// 
 	/// </summary>
 	/// <param name="view"></param>
-	void Draw(ViewProjection view);
+	void Draw(ViewProjection view,int playerLife);
 	
 	/// <summary>
 	/// 
@@ -114,5 +114,5 @@ private:
 	int walkModelTimeFlag = 0;
 
 	// ライフ
-	int32_t Life_ = 0;
+	int32_t Life_ = 6;
 };

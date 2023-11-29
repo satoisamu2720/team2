@@ -27,7 +27,7 @@ void Boss::Initialize(Model* model, Model* modelA,Model * modelB, Model* modelE)
 	 worldTransformBody_.parent_ = &worldTransform_;
 
 	// ライフ
-	Life_ = 3;
+	Life_ = 20;
 
 	RespawnTime = 600;
 

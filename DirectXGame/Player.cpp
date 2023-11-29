@@ -158,8 +158,9 @@ void Player::Update() {
 
 	//デバッグ
 	ImGui::Begin("Debug");
-	ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
-	ImGui::InputInt("playerAttackFlag", &playerAttackFlag);
+	//ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
+	//ImGui::InputInt("dddd", &playerAttackFlag);
+	ImGui::InputInt("playerAttackFlag", &Life_);
 	ImGui::SliderFloat3("player", inputFloat3, -30.0f, 30.0f);
 	ImGui::End();
 	worldTransform_.translation_.x = inputFloat3[0];
@@ -171,25 +172,26 @@ void Player::Update() {
 void Player::Attack() {
 	if (input_->PushKey(DIK_SPACE)) {
 		playerAttackFlag = 1;
-		worldTransformR_arm_.rotation_.x -= 0.1f;
+		//worldTransformR_arm_.rotation_.x -= 0.1f;
 	} else {
 		playerAttackFlag = 0;
 	}
 
 }
 
-void Player::Draw(ViewProjection view) { 
+void Player::Draw(ViewProjection view,int playerLife) { 
+	if (playerLife >= 1) {
 
-	modelFighterBody_->Draw(worldTransformBody_, view);
-	modelFighterHead_->Draw(worldTransformHead_, view);
-	modelFighterL_arm_->Draw(worldTransformL_arm_, view);
-	modelFighterR_arm_->Draw(worldTransformR_arm_, view);
-	modelFighterL_feet_->Draw(worldTransformL_feet_, view);
-	modelFighterR_feet_->Draw(worldTransformR_feet_, view);
-	if (playerAttackFlag == 1) {
-		modelAttack_->Draw(worldTransformAttack_, view);
+		modelFighterBody_->Draw(worldTransformBody_, view);
+		modelFighterHead_->Draw(worldTransformHead_, view);
+		modelFighterL_arm_->Draw(worldTransformL_arm_, view);
+		modelFighterR_arm_->Draw(worldTransformR_arm_, view);
+		modelFighterL_feet_->Draw(worldTransformL_feet_, view);
+		modelFighterR_feet_->Draw(worldTransformR_feet_, view);
+		if (playerAttackFlag == 1) {
+			modelAttack_->Draw(worldTransformAttack_, view);
+		}
 	}
-	
 };
 
 Vector3 Player::GetWorldPosition() {
