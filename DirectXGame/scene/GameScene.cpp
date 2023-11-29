@@ -24,11 +24,12 @@ void GameScene::Initialize() {
 	modelFighterL_feet_.reset(Model::CreateFromOBJ("feet_left", true));
 	modelFighterR_feet_.reset(Model::CreateFromOBJ("feet_right", true));
 	modelAreaItem_.reset(Model::CreateFromOBJ("body", true));
-	modelEnemyBossOne_.reset(Model::CreateFromOBJ("Boss", true));
+	modelEnemyBossOne_.reset(Model::CreateFromOBJ("BossAttackArm", true));
 	modelPlayerAttack_.reset(Model::CreateFromOBJ("head", true));
 	
 
-	modelBoss_.reset(Model::CreateFromOBJ("Boss", true));
+	modelBossBody_.reset(Model::CreateFromOBJ("Boss_body", true));
+	modelBossArm_.reset(Model::CreateFromOBJ("Boss_arm", true));
 
 		modelLotEnemy_.reset(Model::CreateFromOBJ("lotenemy", true));
 	
@@ -47,7 +48,7 @@ void GameScene::Initialize() {
 	Vector3 r_amrPosition(1.5f, 1, 0);
 	Vector3 l_feetPosition(-0.5f, -2, 0);
 	Vector3 r_feetPosition(0.5f, -2, 0);
-	Vector3 attackPosition(0.0f ,-2.0f ,3.0f);
+	Vector3 attackPosition(0.0f ,0.0f ,6.0f);
 	// 自キャラの初期化
 	player_->Initialize(
 		modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
@@ -56,7 +57,8 @@ void GameScene::Initialize() {
 	    bodyPosition, headPosition, l_amrPosition, r_amrPosition, l_feetPosition, r_feetPosition, attackPosition);
 
 	boss_ = std::make_unique<Boss>();
-	boss_->Initialize(modelEnemyBossOne_.get(),modelBoss_.get(), modelLotEnemy_.get());
+	boss_->Initialize(
+	    modelEnemyBossOne_.get(), modelBossArm_.get(),  modelBossBody_.get(), modelLotEnemy_.get());
 
 		/*lotenemy_ = std::make_unique<Boss>();
 		lotenemy_->Initialize(modelLotEnemy_.get());*/
@@ -75,12 +77,12 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	areaItem_ = std::make_unique<AreaItem>();
-	areaItem_->Initialize(modelAreaItem_.get(), {10.0f, 0.0f, 0.0f});
+	areaItem_->Initialize(modelAreaItem_.get(), {0.0f, 0.0f, -30.0f});
 
 	enemyBossOne_ = std::make_unique<EnemyBossOne>();
 	enemyBossOne_->Initialize( modelEnemyBossOne_.get(), {
 		areaItem_->GetItemWorldTransform().translation_.x,
-		10.0f,
+		30.0f,
 		areaItem_->GetItemWorldTransform().translation_.z
 		}
 	);
@@ -104,7 +106,6 @@ void GameScene::Update() {
 	skydome_->Update();
 	ground_->Update();
 	areaItem_->Update();
-	
 	
 	debugCamera_->Update();
 	//デバックカメラのifdef
@@ -174,7 +175,7 @@ void GameScene::ItemOnCollision() {
 		    abs(player_->GetWorldTransform().translation_.z -
 		        boss_->GetWorldTransform().translation_.z);
 		// 衝突したら
-		if (dx < 2 && dz < 1) {
+		if (dx < 5 && dz < 5) {
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
 			boss_->ItemOnCollisions();

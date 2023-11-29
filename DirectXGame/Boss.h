@@ -9,7 +9,7 @@
 
 class Boss {
 public:
-	void Initialize(Model* model,Model* modelB, Model* modelE);
+	void Initialize(Model* model, Model* modelA, Model* modelB, Model* modelE);
 	void Update();
 	void Draw(const ViewProjection& viewProjection_);
 	// 敵が出るタイミング
@@ -30,9 +30,18 @@ public:
 	private:
 	Input* input_ = nullptr;
 	// ワールド変換データ
-	    WorldTransform worldTransform_;
+	 WorldTransform worldTransform_;
+	// 体ワールド変換データ
+	 WorldTransform worldTransformBody_;
+	    // 腕ワールド変換データ
+	 WorldTransform worldTransformArm_;
+
+	  // 小敵ワールド変換データ
+	 WorldTransform worldTransformLot_;
+
 	// モデル
 	    Model* model_;
+	 Model* modelA_ = nullptr;
 	    Model* modelB_ = nullptr;
 	    Model* modelE_ = nullptr;
 	//ボスの回るスピード

@@ -75,7 +75,8 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterL_arm_;
 	std::unique_ptr<Model> modelFighterR_arm_;
 	
-	std::unique_ptr<Model> modelBoss_;
+	std::unique_ptr<Model> modelBossBody_;
+	std::unique_ptr<Model> modelBossArm_;
 	std::unique_ptr<Model> modelLotEnemy_;
 	
 	std::unique_ptr<Model> modelFighterL_feet_;
@@ -119,7 +120,7 @@ private: // メンバ変数
 		int areaItemCollisionFlag = 1;
 		int areaItemCollisionTimeFlag = 0;
 	    int areaItemCollisionTime = 0;
-	    int areaItemCollisionTimeCount = 60;
+	    int areaItemCollisionTimeCount = 60*5;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

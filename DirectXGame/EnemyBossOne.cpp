@@ -6,7 +6,7 @@ void EnemyBossOne::Initialize(Model* model, const Vector3& position) {
 	modelEnemyBossOne_ = model;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
-	
+	worldTransform_.scale_ = {8.0f, 8.0f, 8.0f};
 	
 }
 
@@ -18,8 +18,8 @@ void EnemyBossOne::Update() {
 	worldTransform_.UpdateMatrix();
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 
-	if (worldTransform_.translation_.y == 0.0f) {
-		worldTransform_.translation_.y = 20.0f;
+	if (worldTransform_.translation_.y <= 0.0f) {
+		worldTransform_.translation_.y = 0.0f;
 	}
 }
 

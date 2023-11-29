@@ -38,7 +38,7 @@ void Player::Initialize(
 	worldTransformR_feet_.Initialize();
 	worldTransformAttack_.Initialize();
 
-	Vector3 basePosition(0, 4, 0);
+	Vector3 basePosition(0, 4, -60);
 	worldTransform_.translation_ = basePosition;
 	worldTransformBody_.translation_ = BodyPosition;
 	worldTransformHead_.translation_ = HeadPosition;
@@ -47,7 +47,7 @@ void Player::Initialize(
 	worldTransformL_feet_.translation_ = L_feetPosition;
 	worldTransformR_feet_.translation_ = R_feetPosition;
 	worldTransformAttack_.translation_ = AttackPosition;
-
+	worldTransformAttack_.scale_ = {5.0f, 5.0f, 5.0f};
 	
 	
 	input_ = Input::GetInstance();
@@ -139,36 +139,6 @@ void Player::Update() {
 	// ベクターの加算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move_);
 
-	/////左腕
-	//// Y軸周り角度
-	//worldTransformL_arm_.rotation_.y = std::atan2(move_.x, move_.z);
-	//// ベクターの加算
-	//worldTransformL_arm_.translation_ = Add(worldTransformL_arm_.translation_, move_);
-
-	/////右腕
-	//// Y軸周り角度
-	//worldTransformR_arm_.rotation_.y = std::atan2(move_.x, move_.z);
-	//// ベクターの加算
-	//worldTransformR_arm_.translation_ = Add(worldTransformR_arm_.translation_, move_);
-
-	/////左脚
-	//// Y軸周り角度
-	//worldTransformL_feet_.rotation_.y = std::atan2(move_.x, move_.z);
-	//// ベクターの加算
-	//worldTransformL_feet_.translation_ = Add(worldTransformL_feet_.translation_, move_);
-
-	/////右脚
-	//// Y軸周り角度
-	//worldTransformR_feet_.rotation_.y = std::atan2(move_.x, move_.z);
-	//// ベクターの加算
-	//worldTransformR_feet_.translation_ = Add(worldTransformR_feet_.translation_, move_);
-
-	/////攻撃
-	//// Y軸周り角度
-	//worldTransformAttack_.rotation_.y = std::atan2(move_.x, move_.z);
-	//// ベクターの加算
-	//worldTransformAttack_.translation_ = Add(worldTransformAttack_.translation_, move_);
-
 
 	// 行列更新
 	worldTransform_.UpdateMatrix();
@@ -196,21 +166,10 @@ void Player::Update() {
 	worldTransform_.translation_.y = inputFloat3[1];
 	worldTransform_.translation_.z = inputFloat3[2];
 
-	//// 移動限界座標
-	//const float kMoveLimitX = 34;
-	//const float kMoveLimitY = 18;
-
-	//// 範囲を超えない処理
-	//worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
-	//worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
-	//worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
-	//worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
-	
-	
 }
 
 void Player::Attack() {
-	if (input_->PushKey(DIK_L)) {
+	if (input_->PushKey(DIK_SPACE)) {
 		playerAttackFlag = 1;
 		worldTransformR_arm_.rotation_.x -= 0.1f;
 	} else {
