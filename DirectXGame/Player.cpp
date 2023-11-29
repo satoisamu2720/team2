@@ -70,7 +70,7 @@ void Player::Update() {
 	Vector3 move_ = { 0, 0, 0 };
 
 	// キャラクターの移動速度
-	const float kCharacterSpeed = 0.5f;
+	const float kCharacterSpeed = 5.5f;
 	//const float kRotSpeed = 0.05f;
 	if (input_->PushKey(DIK_W)) {
 		move_.z += kCharacterSpeed;
