@@ -1,7 +1,9 @@
 ﻿#include "Boss.h"
 
-void Boss::Initialize(Model* modelB, Model* modelE) {
+void Boss::Initialize(Model* model ,Model* modelB, Model* modelE) {
 	// NULLポインタチェック
+	assert(model);
+	model_ = model;
 	assert(modelB);
 	 modelB_= modelB;
 	assert(modelE);
@@ -67,6 +69,7 @@ void Boss::Update() {
 void Boss::Draw(const ViewProjection& viewProjection_) {
 	// 3Dモデルを描画
 	modelB_->Draw(worldTransform_, viewProjection_);
+	model_->Draw(worldTransform_, viewProjection_);
 
 	// 小さい敵の描画複数
 	for (LotEnemy* enemynum : enemyNums_) {
@@ -92,7 +95,7 @@ void Boss::Timing() {
 	}
 }
 
-void Boss::ItemOnColision() {
+void Boss::ItemOnCollisions() {
 	//アイテムとプレイヤーが当たったら小さい敵全員が死ぬ
 	for (LotEnemy* enemynum : enemyNums_) {
 		enemynum->OnCollision();

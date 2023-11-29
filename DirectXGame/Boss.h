@@ -9,14 +9,14 @@
 
 class Boss {
 public:
-	void Initialize(Model* modelB,Model*modelE);
+	void Initialize(Model* model,Model* modelB, Model* modelE);
 	void Update();
 	void Draw(const ViewProjection& viewProjection_);
 	// 敵が出るタイミング
 	void Timing();
 	// 衝突を検出したら呼び出されるコールバック関数
 	//アイテム
-	void ItemOnColision();
+	void ItemOnCollisions();
 
 
 	//小さい敵
@@ -32,7 +32,8 @@ public:
 	// ワールド変換データ
 	    WorldTransform worldTransform_;
 	// モデル
-	Model* modelB_ = nullptr;
+	    Model* model_;
+	    Model* modelB_ = nullptr;
 	    Model* modelE_ = nullptr;
 	//ボスの回るスピード
 	float RotateSpeed;

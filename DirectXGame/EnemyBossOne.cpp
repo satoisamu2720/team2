@@ -12,14 +12,14 @@ void EnemyBossOne::Initialize(Model* model, const Vector3& position) {
 
 void EnemyBossOne::Update() {
 
-	Vector3 move_ = {0, 0, 0};
-	move_.y -= 0.5f; 
+	Vector3 move= {0, 0, 0};
+	move.y -= 0.5f; 
 	// 行列更新
 	worldTransform_.UpdateMatrix();
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move_);
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 
-	if (worldTransform_.translation_.y == -20.0f) {
-		worldTransform_.translation_.y = 10.0f;
+	if (worldTransform_.translation_.y == 0.0f) {
+		worldTransform_.translation_.y = 20.0f;
 	}
 }
 

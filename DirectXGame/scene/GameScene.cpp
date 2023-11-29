@@ -24,7 +24,7 @@ void GameScene::Initialize() {
 	modelFighterL_feet_.reset(Model::CreateFromOBJ("feet_left", true));
 	modelFighterR_feet_.reset(Model::CreateFromOBJ("feet_right", true));
 	modelAreaItem_.reset(Model::CreateFromOBJ("body", true));
-	modelEnemyBossOne_.reset(Model::CreateFromOBJ("feet_right", true));
+	modelEnemyBossOne_.reset(Model::CreateFromOBJ("Boss", true));
 	modelPlayerAttack_.reset(Model::CreateFromOBJ("head", true));
 	
 
@@ -56,7 +56,7 @@ void GameScene::Initialize() {
 	    bodyPosition, headPosition, l_amrPosition, r_amrPosition, l_feetPosition, r_feetPosition, attackPosition);
 
 	boss_ = std::make_unique<Boss>();
-	boss_->Initialize(modelBoss_.get(), modelLotEnemy_.get());
+	boss_->Initialize(modelEnemyBossOne_.get(),modelBoss_.get(), modelLotEnemy_.get());
 
 		/*lotenemy_ = std::make_unique<Boss>();
 		lotenemy_->Initialize(modelLotEnemy_.get());*/
@@ -162,10 +162,24 @@ void GameScene::ItemOnCollision() {
 		if (dx < 2 && dz < 2) {
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
-			boss_->ItemOnColision();
+			boss_->ItemOnCollisions();
 		}
 	}
-	
+	if (areaItemCollisionFlag == 1) {
+		// 差を求める
+		float dx =
+		    abs(player_->GetWorldTransform().translation_.x -
+		        boss_->GetWorldTransform().translation_.x);
+		float dz =
+		    abs(player_->GetWorldTransform().translation_.z -
+		        boss_->GetWorldTransform().translation_.z);
+		// 衝突したら
+		if (dx < 2 && dz < 1) {
+			areaItemCollisionTimeFlag = 1;
+			areaItemCollisionFlag = 0;
+			boss_->ItemOnCollisions();
+		}
+	}
 	if (areaItemCollisionFlag == 1) {
 		// 差を求める
 		float dx = abs(
@@ -176,7 +190,7 @@ void GameScene::ItemOnCollision() {
 		if (dx < 2 && dz < 1) {
 			areaItemCollisionTimeFlag = 1;
 			areaItemCollisionFlag = 0;
-			boss_->ItemOnColision();
+			boss_->ItemOnCollisions();
 		}
 	}
 	if (areaItemCollisionTimeFlag == 1) {
