@@ -106,7 +106,8 @@ void GameScene::Initialize() {
 	audio_->PlayWave(soundDataHandle_,true);
 	//音は適当に用意したものなので気に入らなければ変更
 	// 一応ファイルには他にボスの腕が落ちる音と自機の攻撃の音が入ってる
-	//敵からのダメージ音各場所に置くボスと小さいの
+	//敵からのダメージ音各場所に置く
+	// ボスと小さいの
 	//audio_->PlayWave(LotDanageSound_);
 	//audio_->PlayWave(BossDamageSound_);
 	//シーン切り替えとかのキーを押したときの音
