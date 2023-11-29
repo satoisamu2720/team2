@@ -66,7 +66,9 @@ public: // メンバ関数
 	void GameClearUpdate();
 
 	void Reset();
-
+	void TitleUpdate();
+	void TitleDraw2DNear();
+	void GameOverDraw2DNear(); // ゲームオーバー
 private: // メンバ変数
 	// テクスチャハンドル
 

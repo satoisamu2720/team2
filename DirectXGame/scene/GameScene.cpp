@@ -341,7 +341,12 @@ void GameScene::ItemOnCollision() {
 
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
-
+	if (sceneMode_ == 1) {
+		TitleDraw2DNear();
+	}
+	if (sceneMode_ == 2) {
+		GameOverDraw2DNear();
+	}
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 
