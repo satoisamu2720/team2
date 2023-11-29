@@ -213,6 +213,7 @@ void GameScene::ItemOnCollision() {
 			areaItemCollisionFlag = 0;
 			enemyAttackFlag = 1;
 			boss_->ItemOnCollisions();
+			areaItem_->Random();
 		}
 	}
 
@@ -247,6 +248,8 @@ void GameScene::ItemOnCollision() {
 			playerLife_ -= 1;
 			enemyAttackCollisionFlag = 0;
 			boss_->ItemOnCollisions();
+			areaItemCollisionFlag = 0;
+			areaItem_->Random();
 		}
 	}
 

@@ -113,8 +113,7 @@ void Boss::Timing() {
 void Boss::ItemOnCollisions() {
 	//アイテムとプレイヤーが当たったら小さい敵全員が死ぬ
 	for (LotEnemy* enemynum : enemyNums_) {
-		enemynum->DieMotion();
-			//enemynum->OnCollision();
+			enemynum->OnCollision();
 	}
 	phase_ = Phase::noAttack;
 }

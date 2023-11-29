@@ -31,6 +31,7 @@ class AreaItem {
 	///
 	void OnCollision();
 
+	void Random();
 
 	/// <summary>
 	///
@@ -51,9 +52,9 @@ private:
 
 	Vector3 velocity_ = {0, 0, 0};
 
-
-	
 	Player* player_;
+
+
 };
 
 

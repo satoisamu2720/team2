@@ -51,15 +51,6 @@ void LotEnemy::OnCollision() {
 		isDead_ = true;
 }
 
-void LotEnemy::DieMotion() {
-	//移動させる
-	   velocity_.x *=1000;
-	    velocity_.z *=1000;
-	     worldTransform_.translation_.x += velocity_.x;
-	    worldTransform_.translation_.z += velocity_.z;
-		
-	    // ワールドトランスフォームの更新　場所動かすときに使える
-	    worldTransform_.UpdateMatrix();
-}
+
 
 
