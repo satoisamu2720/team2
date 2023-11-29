@@ -37,7 +37,13 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
 	worldTransform_.Initialize();
-	
+
+
+	playerLife_a = TextureManager::Load("Plife1.png");
+	playerLife_b = TextureManager::Load("Plife2.png");
+	playerLife_c = TextureManager::Load("Plife3.png");
+	playerLife_d = TextureManager::Load("Plife4.png");
+	playerLife_e = TextureManager::Load("Plife5.png");
 	
 	viewProjection_.Initialize();
 
@@ -319,7 +325,11 @@ void GameScene::ItemOnCollision() {
 
 #endif // _DEBUG
 }
-
+void GameScene::TitleDraw2DNear() { spriteTitle_->Draw(); }
+void GameScene::GameOverDraw2DNear() {
+	spriteGameover_->Draw();
+}
+void GameScene::GameClearDraw2DNear() { spriteGameClear_->Draw(); }
 
 	void GameScene::Draw() {
 
@@ -363,12 +373,15 @@ void GameScene::ItemOnCollision() {
 
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
-	/*if (sceneMode_ == 1) {
+	if (sceneMode_ == 1) {
 		TitleDraw2DNear();
 	}
 	if (sceneMode_ == 2) {
 		GameOverDraw2DNear();
-	}*/
+	}
+	if (sceneMode_ == 3) {
+		GameClearDraw2DNear();
+	}
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 
@@ -392,4 +405,6 @@ void GameScene::ItemOnCollision() {
 	sceneMode_ = 1;
 	playerLife_ = 6;
 	bossLife_ = 20;
-}
+    }
+
+  

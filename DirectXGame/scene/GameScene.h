@@ -66,8 +66,11 @@ public: // メンバ関数
 	void GameClearUpdate();
 
 	void Reset();
-	//void TitleDraw2DNear();
-	//void GameOverDraw2DNear(); // ゲームオーバー
+	void TitleDraw2DNear();
+	void GameOverDraw2DNear(); 
+	void GameClearDraw2DNear();
+
+
 private: // メンバ変数
 	// テクスチャハンドル
 
@@ -117,13 +120,27 @@ private: // メンバ変数
 
 	Vector3 velocity_;
 
-	//サウンド
-	uint32_t BGMSound_=0;
-	uint32_t LotDanageSound_ = 0;
-	uint32_t BossDamageSound_ = 0;
-	uint32_t ItemSound_ = 0;
-	uint32_t SystemSound_ = 0;
-	
+	// タイトル（スプライト）
+	uint32_t textureHandleTitle_ = 0;
+	Sprite* spriteTitle_ = nullptr;
+
+	uint32_t textureHandleTitleEnter_ = 0;
+	Sprite* spriteEnter_ = nullptr;
+
+	uint32_t textureHandleGameover_ = 0;
+	Sprite* spriteGameover_ = nullptr;
+
+	uint32_t textureHandleGameClear_ = 0;
+	Sprite* spriteGameClear_ = nullptr;
+
+	 uint32_t playerLife_a = 0;
+	uint32_t playerLife_b = 0;
+	 uint32_t playerLife_c = 0;
+	uint32_t playerLife_d = 0;
+	 uint32_t playerLife_e = 0;
+
+
+	Sprite* spritePlayerLife_[5] = {nullptr};
 	//const WorldTransform& GetWorldTransform() { return matProjection; }
 
 	bool isDebugCameraActive_ = false;
