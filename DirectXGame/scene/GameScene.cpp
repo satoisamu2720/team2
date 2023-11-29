@@ -180,6 +180,7 @@ void GameScene::GameOverUpdate() {
 	if (input_->TriggerKey(DIK_SPACE)) {
 		Initialize();
 		sceneMode_ = 1;
+		Reset();
 	}
 
 
@@ -188,6 +189,7 @@ void GameScene::GameClearUpdate() {
 	if (input_->TriggerKey(DIK_SPACE)) {
 		Initialize();
 		sceneMode_ = 1;
+		Reset();
 	}
 }
 
@@ -242,7 +244,7 @@ void GameScene::ItemOnCollision() {
 		float dist = dx * dx + dy * dy + dz * dz;
 		dist = sqrtf(dist);
 		// 10 = 二つの円の半径足したもの
-		if (dist <= 20) {
+		if (dist <= 10) {
 			playerLife_ -= 1;
 			enemyAttackCollisionFlag = 0;
 			boss_->ItemOnCollisions();
@@ -348,16 +350,16 @@ void GameScene::ItemOnCollision() {
 
 }
 
-	//void GameScene::Reset() {
-	//int CollisionFlag = 0;
-	//int areaItemCollisionFlag = 1;
-	//int enemyAttackCollisionFlag = 0;
-	//int enemyAttackFlag = 0;
-	//int areaItemCollisionTimeFlag = 0;
-	//int areaItemCollisionTime = 0;
-	//int areaItemCollisionTimeCount = 60 * 5;
-	//// シーン切り替え
-	//int sceneMode_ = 1;
-	//int playerLife_ = 6;
-	//int bossLife_ = 20;
-	//}
+	void GameScene::Reset() {
+	CollisionFlag = 0;
+	areaItemCollisionFlag = 1;
+	enemyAttackCollisionFlag = 0;
+	enemyAttackFlag = 0;
+	areaItemCollisionTimeFlag = 0;
+	areaItemCollisionTime = 0;
+	areaItemCollisionTimeCount = 60 * 5;
+	// シーン切り替え
+	sceneMode_ = 1;
+	playerLife_ = 6;
+	bossLife_ = 20;
+}
